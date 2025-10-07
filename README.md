@@ -49,7 +49,7 @@ Access powerful Google Gemini models with generous free tier limits:
 
 GitHub provides two types of AI model access for developers:
 
-<details open>
+<details>
 <summary><b>🤖 GitHub Copilot Models</b></summary>
 
 <br>
@@ -435,6 +435,10 @@ SAML SSO, BYOL, zero data retention
 ```bash
 brew install --cask warp    # macOS
 winget install Warp.Warp    # Windows
+
+# Linux - Multiple package formats available
+# See: https://www.warp.dev/blog/warp-for-linux
+# Packages include: .deb (apt), .rpm (yum/dnf/zypper), Snap, Flatpak, AppImage, and AUR
 ```
 
 ### 🌊 Wave Terminal
