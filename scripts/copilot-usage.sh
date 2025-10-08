@@ -5,7 +5,7 @@
 # Author: Shuwei Ye, yesw@bnl.gov
 # Date: 2025-10-01
 
-readonly SCRIPT_VERSION="20251004-r2"
+readonly SCRIPT_VERSION="20251008-r1"
 
 # Check if script is being sourced (should be executed directly)
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]]; then
@@ -48,6 +48,11 @@ ${bold}Authentication priority:${reset}
 2. GITHUB_TOKEN environment variable (must start with 'ghu_')
 3. Token from ~/.copilot/config.json (copilot_tokens for last_logged_in_user)
 4. OAuth device flow (interactive authentication)
+
+${bold}${blue}════════════════════════════════════════════════════════════${reset}
+${bold}${green}📚 For more details, visit:${reset}
+${cyan}https://github.com/BNLNPPS/terminal-ai-toolkit/blob/main/Copilot.md${reset}
+${bold}${blue}════════════════════════════════════════════════════════════${reset}
 
 EOF
 }
@@ -290,6 +295,14 @@ get_github_token() {
         fi
     else
         verbose_log "Config file does not exist: $config_file"
+        if [[ "$USE_COLOR" == "true" ]]; then
+            echo "ℹ️  Copilot has not been used yet. For details, visit:" >&2
+            echo "   https://github.com/BNLNPPS/terminal-ai-toolkit/blob/main/Copilot.md" >&2
+        else
+            echo "Copilot has not been used yet. For details, visit:" >&2
+            echo "https://github.com/BNLNPPS/terminal-ai-toolkit/blob/main/Copilot.md" >&2
+        fi
+        echo "" >&2
     fi
     
     # If no valid token found, use OAuth flow to get one

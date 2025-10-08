@@ -278,6 +278,7 @@ This repository includes a powerful script to monitor your GitHub Copilot usage:
 #### ✨ Features
 
 - ✅ Shows subscription type (Individual, Business, Enterprise)
+- 🤖 Shows available models for your subscription
 - 📊 Displays used/remaining monthly premium requests
 - 📅 Shows next quota reset date
 - 🎨 Color-coded output with warning indicators
