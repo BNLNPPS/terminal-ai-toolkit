@@ -5,7 +5,7 @@
 # Author: Shuwei Ye, yesw@bnl.gov
 # Date: 2025-10-01
 
-readonly SCRIPT_VERSION="20251008-r1"
+readonly SCRIPT_VERSION="20251009-r1"
 
 # Check if script is being sourced (should be executed directly)
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]]; then
@@ -18,15 +18,15 @@ show_help() {
     # Use tput for better portability (always show colors for help visibility)
     local bold=$(tput bold)
     local green=$(tput setaf 2)
-    local blue=$(tput setaf 4)
+    local bright_cyan=$(tput setaf 14)
     local cyan=$(tput setaf 6)
     local yellow=$(tput bold)$(tput setaf 3)
     local reset=$(tput sgr0)
-    
+
     cat <<EOF
 ${bold}Usage:${reset} $(basename "$0") [OPTIONS]
 
-${blue}📊 This script ${bold}${green}checks your GitHub Copilot usage${reset}${blue} information including:${reset}
+${bright_cyan}📊 This script ${bold}${green}checks your GitHub Copilot usage${reset}${bright_cyan} information including:${reset}
 - Copilot subscription type
 - Available models for your subscription
 - Used/remaining monthly premium requests (for non-free subscriptions)
@@ -38,6 +38,7 @@ ${bold}Options:${reset}
   ${cyan}--no-color${reset}       Disable colors and emojis for plain text output
   ${cyan}--verbose${reset}        Enable verbose output for debugging
   ${cyan}--version${reset}        Show script version
+  ${cyan}--self-update${reset}    Update script from GitHub repository
 
 ${bold}Requirements:${reset}
 - The ${yellow}'copilot'${reset} command must be available
@@ -49,10 +50,10 @@ ${bold}Authentication priority:${reset}
 3. Token from ~/.copilot/config.json (copilot_tokens for last_logged_in_user)
 4. OAuth device flow (interactive authentication)
 
-${bold}${blue}════════════════════════════════════════════════════════════${reset}
+${bold}${bright_cyan}════════════════════════════════════════════════════════════${reset}
 ${bold}${green}📚 For more details, visit:${reset}
 ${cyan}https://github.com/BNLNPPS/terminal-ai-toolkit/blob/main/Copilot.md${reset}
-${bold}${blue}════════════════════════════════════════════════════════════${reset}
+${bold}${bright_cyan}════════════════════════════════════════════════════════════${reset}
 
 EOF
 }
@@ -61,12 +62,12 @@ EOF
 error_exit() {
     # Use tput for better portability (respect --no-color option if set)
     local red='' bold='' reset=''
-    
+
     if [[ "$USE_COLOR" == "true" ]]; then
         red=$(tput setaf 1)
         bold=$(tput bold)
         reset=$(tput sgr0)
-        
+
         cat >&2 <<EOF
 
 ${red}${bold}════════════════════════════════════════════════════════════${reset}
@@ -93,17 +94,118 @@ EOF
 # Function to print version information
 print_version() {
     # Use tput for better portability (respect --no-color option if set)
-    local bold='' blue='' reset=''
-    
+    local bold='' bright_cyan='' reset=''
+
     if [[ "$USE_COLOR" == "true" ]]; then
         bold=$(tput bold)
-        blue=$(tput setaf 4)
+        bright_cyan=$(tput setaf 14)
         reset=$(tput sgr0)
-        
-        echo "${bold}${blue}📦 Script Version:${reset} $SCRIPT_VERSION"
+
+        echo "${bold}${bright_cyan}📦 Script Version:${reset} $SCRIPT_VERSION"
     else
         echo "Script Version: $SCRIPT_VERSION"
     fi
+    exit 0
+}
+
+# Function to perform self-update
+self_update() {
+    local remote_url="https://raw.githubusercontent.com/BNLNPPS/terminal-ai-toolkit/refs/heads/main/scripts/copilot-usage.sh"
+    local temp_file=$(mktemp)
+    local bold='' green='' yellow='' red='' bright_cyan='' reset=''
+
+    if [[ "$USE_COLOR" == "true" ]]; then
+        bold=$(tput bold)
+        green=$(tput setaf 2)
+        yellow=$(tput setaf 3)
+        red=$(tput setaf 1)
+        bright_cyan=$(tput setaf 14)
+        reset=$(tput sgr0)
+    fi
+
+    # Download the remote version
+    if [[ "$USE_COLOR" == "true" ]]; then
+        echo "${bold}${bright_cyan}🔄 Checking for updates...${reset}"
+    else
+        echo "Checking for updates..."
+    fi
+
+    if ! curl -fsSL "$remote_url" -o "$temp_file"; then
+        rm -f "$temp_file"
+        error_exit "Failed to download the remote script from GitHub."
+    fi
+
+    # Extract remote version
+    local remote_version
+    remote_version=$(grep -m 1 '^readonly SCRIPT_VERSION=' "$temp_file" | cut -d'"' -f2)
+
+    if [[ -z "$remote_version" ]]; then
+        rm -f "$temp_file"
+        error_exit "Failed to parse remote script version."
+    fi
+
+    # Compare versions
+    if [[ "$SCRIPT_VERSION" == "$remote_version" ]]; then
+        if [[ "$USE_COLOR" == "true" ]]; then
+            echo "${bold}${green}✅ Already up to date (version: $SCRIPT_VERSION)${reset}"
+        else
+            echo "Already up to date (version: $SCRIPT_VERSION)"
+        fi
+        rm -f "$temp_file"
+        exit 0
+    fi
+
+    # Check if remote version is newer (simple string comparison)
+    if [[ "$SCRIPT_VERSION" > "$remote_version" ]]; then
+        if [[ "$USE_COLOR" == "true" ]]; then
+            echo "${bold}${yellow}⚠️  Current version ($SCRIPT_VERSION) is newer than remote ($remote_version)${reset}"
+        else
+            echo "Current version ($SCRIPT_VERSION) is newer than remote ($remote_version)"
+        fi
+        rm -f "$temp_file"
+        exit 0
+    fi
+
+    # Perform update
+    if [[ "$USE_COLOR" == "true" ]]; then
+        echo "${bold}${yellow}📥 Updating from $SCRIPT_VERSION to $remote_version...${reset}"
+    else
+        echo "Updating from $SCRIPT_VERSION to $remote_version..."
+    fi
+
+    # Get the current script path
+    local script_path="${BASH_SOURCE[0]}"
+    if [[ ! -f "$script_path" ]]; then
+        rm -f "$temp_file"
+        error_exit "Cannot determine script path for update."
+    fi
+
+    # Backup current version
+    local backup_path="${script_path}.backup"
+    if ! cp "$script_path" "$backup_path"; then
+        rm -f "$temp_file"
+        error_exit "Failed to create backup of current script."
+    fi
+
+    # Replace with new version
+    if ! mv "$temp_file" "$script_path"; then
+        mv "$backup_path" "$script_path"
+        rm -f "$temp_file"
+        error_exit "Failed to update script. Original restored from backup."
+    fi
+
+    # Set executable permission
+    chmod +x "$script_path"
+
+    # Remove backup
+    rm -f "$backup_path"
+
+    if [[ "$USE_COLOR" == "true" ]]; then
+        echo "${bold}${green}✅ Successfully updated to version $remote_version${reset}"
+    else
+        echo "Successfully updated to version $remote_version"
+    fi
+
     exit 0
 }
 
@@ -130,6 +232,10 @@ while [[ $# -gt 0 ]]; do
             print_version
             exit 0
             ;;
+        --self-update)
+            self_update
+            exit 0
+            ;;
         *)
             echo "Unknown option: $1" >&2
             echo "Use -h or --help for usage information." >&2
@@ -142,14 +248,14 @@ done
 if ! command -v copilot >/dev/null 2>&1; then
     # Use tput for better portability (respect --no-color option if set)
     red='' bold='' yellow='' cyan='' reset=''
-    
+
     if [[ "$USE_COLOR" == "true" ]]; then
         red=$(tput setaf 1)
         bold=$(tput bold)
         yellow=$(tput bold)$(tput setaf 3)
         cyan=$(tput setaf 6)
         reset=$(tput sgr0)
-        
+
         cat >&2 <<EOF
 
 ${red}${bold}════════════════════════════════════════════════════════════${reset}
@@ -200,11 +306,11 @@ fi
 # Function to validate GitHub token
 validate_github_token() {
     local token="$1"
-    
+
     if [[ -z "$token" ]]; then
         return 1
     fi
-    
+
     # Valid token starts with "ghu_"
     if [[ "$token" == ghu_* ]]; then
         return 0
@@ -223,9 +329,9 @@ verbose_log() {
 # Function to extract GitHub token
 get_github_token() {
     local github_token=""
-    
+
     verbose_log "Starting token retrieval process..."
-    
+
     # Check for GH_TOKEN environment variable first
     if [[ -n "${GH_TOKEN}" ]]; then
         verbose_log "Found GH_TOKEN environment variable"
@@ -240,7 +346,7 @@ get_github_token() {
     else
         verbose_log "GH_TOKEN environment variable not set"
     fi
-    
+
     # Check for GITHUB_TOKEN environment variable second
     if [[ -n "${GITHUB_TOKEN}" ]]; then
         verbose_log "Found GITHUB_TOKEN environment variable"
@@ -255,24 +361,24 @@ get_github_token() {
     else
         verbose_log "GITHUB_TOKEN environment variable not set"
     fi
-    
+
     # Try to get token from config.json file
     local config_file="$HOME/.copilot/config.json"
     verbose_log "Checking for config file: $config_file"
-    
+
     if [[ -f "$config_file" ]]; then
         verbose_log "Config file exists, attempting to read..."
-        
+
         # Ensure secure permissions on config file
         chmod 0600 "$config_file" 2>/dev/null || true
-        
+
         # Try to parse the JSON file to get last_logged_in_user
         local host login token_key token_value
         if host=$(jq -r '.last_logged_in_user.host // empty' "$config_file" 2>/dev/null) && [[ -n "$host" ]]; then
             if login=$(jq -r '.last_logged_in_user.login // empty' "$config_file" 2>/dev/null) && [[ -n "$login" ]]; then
                 token_key="${host}:${login}"
                 verbose_log "Found last_logged_in_user: $token_key"
-                
+
                 # Get the token for this user from copilot_tokens
                 if token_value=$(jq -r --arg key "$token_key" '.copilot_tokens[$key] // empty' "$config_file" 2>/dev/null) && [[ -n "$token_value" ]]; then
                     verbose_log "Found token in config.json for $token_key"
@@ -304,12 +410,12 @@ get_github_token() {
         fi
         echo "" >&2
     fi
-    
+
     # If no valid token found, use OAuth flow to get one
     verbose_log "No valid token found, initiating OAuth flow..."
     if github_token=$(get_github_oauth_token); then
         verbose_log "Successfully obtained token via OAuth"
-        
+
         # Validate the newly obtained token
         if validate_github_token "$github_token"; then
             verbose_log "OAuth token is valid (starts with ghu_)"
@@ -330,10 +436,10 @@ get_github_oauth_token() {
     local client_id="Iv1.b507a08c87ecfe98"
     local device_code user_code verification_uri expires_in interval
     local access_token
-    
+
     # Use tput for better portability (respect --no-color option if set)
     local info='' bold='' cyan='' yellow='' reset=''
-    
+
     if [[ "$USE_COLOR" == "true" ]]; then
         info=$(tput setaf 3)  # Yellow for info
         bold=$(tput bold)
@@ -341,10 +447,10 @@ get_github_oauth_token() {
         yellow=$(tput bold)$(tput setaf 3)
         reset=$(tput sgr0)
     fi
-    
+
     # Step 1: Get device code
     echo "${info}ℹ Not logged in, getting new access token${reset}" >&2
-    
+
     local device_response
     if ! device_response=$(curl -s -X POST "https://github.com/login/device/code" \
         -H "Accept: application/json" \
@@ -353,34 +459,34 @@ get_github_oauth_token() {
         echo "${red}Error: Failed to get device code from GitHub${reset}" >&2
         return 1
     fi
-    
+
     # Parse device response
     if ! device_code=$(echo "$device_response" | jq -r '.device_code // empty' 2>/dev/null) || [[ -z "$device_code" ]]; then
         echo "${red}Error: Failed to parse device code from response${reset}" >&2
         echo "Response: $device_response" >&2
         return 1
     fi
-    
+
     if ! user_code=$(echo "$device_response" | jq -r '.user_code // empty' 2>/dev/null) || [[ -z "$user_code" ]]; then
         echo "${red}Error: Failed to parse user code from response${reset}" >&2
         return 1
     fi
-    
+
     if ! verification_uri=$(echo "$device_response" | jq -r '.verification_uri // empty' 2>/dev/null) || [[ -z "$verification_uri" ]]; then
         echo "${red}Error: Failed to parse verification URI from response${reset}" >&2
         return 1
     fi
-    
+
     expires_in=$(echo "$device_response" | jq -r '.expires_in // 900' 2>/dev/null)
     interval=$(echo "$device_response" | jq -r '.interval // 5' 2>/dev/null)
-    
+
     # Display authentication instructions
     echo "${info}ℹ Please enter the code \"${bold}${user_code}${reset}${info}\" in ${cyan}${verification_uri}${reset}" >&2
-    
+
     # Step 2: Poll for access token
     local start_time=$(date +%s)
     local end_time=$((start_time + expires_in))
-    
+
     while [[ $(date +%s) -lt $end_time ]]; do
         local token_response
         if token_response=$(curl -s -X POST "https://github.com/login/oauth/access_token" \
@@ -388,7 +494,7 @@ get_github_oauth_token() {
             -d "client_id=${client_id}" \
             -d "device_code=${device_code}" \
             -d "grant_type=urn:ietf:params:oauth:grant-type:device_code" 2>/dev/null); then
-            
+
             # Check for access token in response
             if access_token=$(echo "$token_response" | jq -r '.access_token // empty' 2>/dev/null) && [[ -n "$access_token" ]]; then
                 # Get user login from GitHub API
@@ -397,40 +503,40 @@ get_github_oauth_token() {
                     -H "Content-Type: application/json" \
                     -H "Accept: application/json" \
                     "https://api.github.com/user" 2>/dev/null); then
-                    
+
                     if login=$(echo "$user_response" | jq -r '.login // empty' 2>/dev/null) && [[ -n "$login" ]]; then
                         # Create config directory if it doesn't exist
                         local config_dir="$HOME/.copilot"
                         mkdir -p "$config_dir"
-                        
+
                         # Save token to config.json
                         local config_file="$config_dir/config.json"
                         local host="https://github.com"
                         local token_key="${host}:${login}"
-                        
+
                         # Read existing config or create new one
                         local config_json="{}"
                         if [[ -f "$config_file" ]]; then
                             config_json=$(cat "$config_file")
                         fi
-                        
+
                         # Update config with new token using jq
                         config_json=$(echo "$config_json" | jq --arg key "$token_key" --arg token "$access_token" \
                             '.copilot_tokens = (.copilot_tokens // {}) | .copilot_tokens[$key] = $token')
-                        
+
                         # Write back to config file
                         echo "$config_json" > "$config_file"
-                        
+
                         # Set secure permissions (read/write for owner only)
                         chmod 0600 "$config_file"
                         echo "${info}ℹ Token saved to ${config_file}${reset}" >&2
                     fi
                 fi
-                
+
                 echo "$access_token"
                 return 0
             fi
-            
+
             # Check for error
             local error
             if error=$(echo "$token_response" | jq -r '.error // empty' 2>/dev/null); then
@@ -453,11 +559,11 @@ get_github_oauth_token() {
                 esac
             fi
         fi
-        
+
         # Wait before next poll
         sleep "$interval"
     done
-    
+
     echo "${red}Error: Authentication timed out${reset}" >&2
     return 1
 }
@@ -471,7 +577,7 @@ get_copilot_usage() {
         "-H" "Authorization: Bearer ${github_token}"
         "-H" "Content-Type: application/json"
     )
-    
+
     if ! curl -sSf --connect-timeout 10 --max-time 30 "${base_headers[@]}" \
          "https://api.github.com/copilot_internal/user"; then
         error_exit "Failed to retrieve Copilot usage information. Please check your token and network connection."
@@ -485,7 +591,7 @@ get_github_username() {
         "-H" "Authorization: Bearer ${github_token}"
         "-H" "Content-Type: application/json"
     )
-    
+
     local user_info
     if user_info=$(curl -sSf --connect-timeout 10 --max-time 30 "${base_headers[@]}" \
          "https://api.github.com/user" 2>/dev/null); then
@@ -499,43 +605,43 @@ get_github_username() {
 parse_usage() {
     local json_data="$1"
     local github_login="$2"
-    
+
     # Use tput for better portability (only if colors are enabled)
-    local bold='' green='' yellow='' blue='' cyan='' red='' magenta='' reset=''
-    
+    local bold='' green='' yellow='' bright_cyan='' cyan='' red='' magenta='' reset=''
+
     if [[ "$USE_COLOR" == "true" ]]; then
         bold=$(tput bold)
         green=$(tput setaf 2)
         yellow=$(tput bold)$(tput setaf 3)
-        blue=$(tput setaf 4)
+        bright_cyan=$(tput setaf 14)
         cyan=$(tput setaf 6)
         red=$(tput setaf 1)
         magenta=$(tput setaf 5)
         reset=$(tput sgr0)
     fi
-    
+
     # Extract basic info
     local access_type reset_date
     access_type=$(echo "$json_data" | jq -r '.access_type_sku // "unknown"')
-    
+
     # Print header with border
     echo ""
     if [[ "$USE_COLOR" == "true" ]]; then
-        echo "${bold}${blue}════════════════════════════════════════════════════════════${reset}"
-        echo "${bold}${blue}  📊 GitHub Copilot Usage Information for ${github_login}${reset}"
-        echo "${bold}${blue}════════════════════════════════════════════════════════════${reset}"
+        echo "${bold}${bright_cyan}════════════════════════════════════════════════════════════${reset}"
+        echo "${bold}${bright_cyan}  📊 GitHub Copilot Usage Information for ${github_login}${reset}"
+        echo "${bold}${bright_cyan}════════════════════════════════════════════════════════════${reset}"
     else
         echo "════════════════════════════════════════════════════════════"
         echo "  GitHub Copilot Usage Information for ${github_login}"
         echo "════════════════════════════════════════════════════════════"
     fi
     echo ""
-    
+
     # Check if this is a free subscription
     if echo "$json_data" | jq -e '.limited_user_quotas' >/dev/null 2>&1; then
         # FREE SUBSCRIPTION
         reset_date=$(echo "$json_data" | jq -r '.limited_user_reset_date // "unknown"')
-        
+
         # Display reset date at the top
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}📅 Next Reset Date: ${yellow}$reset_date${reset}"
@@ -543,7 +649,7 @@ parse_usage() {
             echo "Next Reset Date: $reset_date"
         fi
         echo ""
-        
+
         # Subscription type
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}📋 Subscription: ${cyan}$access_type${reset} ${green}🆓${reset}"
@@ -551,7 +657,7 @@ parse_usage() {
             echo "Subscription: $access_type (Free)"
         fi
         echo ""
-        
+
         # Available models for free subscription
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}🤖 Available Models: ${cyan}claude-Sonnet-4, gpt-5${reset}"
@@ -559,7 +665,7 @@ parse_usage() {
             echo "Available Models: claude-sonnet-4, gpt-5"
         fi
         echo ""
-        
+
         local monthly_chat_quota monthly_chat_used remaining_chats remaining_requests
         monthly_chat_quota=$(echo "$json_data" | jq -r '.monthly_quotas.chat // 0')
         local limited_chat_quota
@@ -567,7 +673,7 @@ parse_usage() {
         monthly_chat_used=$((monthly_chat_quota - limited_chat_quota))
         remaining_chats=$limited_chat_quota
         remaining_requests=$((remaining_chats / 10))
-        
+
         # Display usage with visual emphasis
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}${magenta}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${reset}"
@@ -579,13 +685,13 @@ parse_usage() {
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         fi
         echo ""
-        
+
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "  ${bold}Monthly Quota:${reset} $monthly_chat_quota"
             echo "  ${bold}Used:${reset}          $monthly_chat_used"
             echo ""
             echo "  ${bold}${green}💬 Remaining Chat Requests: ${bold}${remaining_chats}${reset}"
-            echo "  ${cyan}   (≈ ${bold}$remaining_requests${reset}${cyan} Copilot requests @ 10 chats each)${reset}"
+            echo "  ${cyan}   (≈ ${bold}$remaining_requests${reset}${cyan} Copilot prompts @ 10 chats each)${reset}"
         else
             echo "  Monthly Quota: $monthly_chat_quota"
             echo "  Used:          $monthly_chat_used"
@@ -593,11 +699,11 @@ parse_usage() {
             echo "  Remaining Chat Requests: $remaining_chats"
             echo "   (≈ $remaining_requests Copilot prompts @ 10 chats each)"
         fi
-        
+
     else
         # PREMIUM SUBSCRIPTION
         reset_date=$(echo "$json_data" | jq -r '.quota_reset_date // .quota_reset_date_utc // "unknown"')
-        
+
         # Display reset date at the top
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}📅 Next Reset Date: ${yellow}$reset_date${reset}"
@@ -605,7 +711,7 @@ parse_usage() {
             echo "Next Reset Date: $reset_date"
         fi
         echo ""
-        
+
         # Subscription type
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}📋 Subscription: ${cyan}$access_type${reset} ${magenta}💎${reset}"
@@ -613,7 +719,7 @@ parse_usage() {
             echo "Subscription: $access_type (Premium)"
         fi
         echo ""
-        
+
         # Available models for non-free subscription
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}🤖 Available Models: ${cyan}claude-sonnet-4.5, claude-sonnet-4, gpt-5${reset}"
@@ -621,16 +727,16 @@ parse_usage() {
             echo "Available Models: claude-sonnet-4.5, claude-sonnet-4, gpt-5"
         fi
         echo ""
-        
+
         # Premium interactions section
         if echo "$json_data" | jq -e '.quota_snapshots.premium_interactions' >/dev/null 2>&1; then
             local entitlement remaining unlimited
             entitlement=$(echo "$json_data" | jq -r '.quota_snapshots.premium_interactions.entitlement // 0')
             remaining=$(echo "$json_data" | jq -r '.quota_snapshots.premium_interactions.remaining // 0')
             unlimited=$(echo "$json_data" | jq -r '.quota_snapshots.premium_interactions.unlimited // false')
-            
+
             local used=$((entitlement - remaining))
-            
+
             if [[ "$USE_COLOR" == "true" ]]; then
                 echo "${bold}${magenta}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${reset}"
                 echo "${bold}${cyan}  ⚡ Premium Interactions${reset}"
@@ -641,7 +747,7 @@ parse_usage() {
                 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             fi
             echo ""
-            
+
             if [[ "$unlimited" == "true" ]]; then
                 if [[ "$USE_COLOR" == "true" ]]; then
                     echo "  ${bold}${green}🚀 Status: ${bold}UNLIMITED${reset}"
@@ -656,29 +762,16 @@ parse_usage() {
                     elif [[ $remaining -le 50 ]]; then
                         remaining_color="$yellow"
                     fi
-                    
+
                     echo "  ${bold}Monthly Quota:${reset} $entitlement"
                     echo "  ${bold}Used:${reset}          $used"
                     echo ""
                     echo "  ${bold}${remaining_color}⚡ Remaining Premium Requests: ${bold}$remaining${reset}"
-                    
-                    # Add warning if low
-                    if [[ $remaining -le 10 ]]; then
-                        echo "  ${bold}${red}⚠️  WARNING: Low quota! Only $remaining requests left${reset}"
-                    elif [[ $remaining -le 50 ]]; then
-                        echo "  ${bold}${yellow}⚠️  NOTICE: $remaining requests remaining${reset}"
-                    fi
                 else
                     echo "  Monthly Quota: $entitlement"
                     echo "  Used:          $used"
                     echo ""
                     echo "  Remaining Premium Requests: $remaining"
-                    
-                    if [[ $remaining -le 10 ]]; then
-                        echo "  WARNING: Low quota! Only $remaining requests left"
-                    elif [[ $remaining -le 50 ]]; then
-                        echo "  NOTICE: $remaining requests remaining"
-                    fi
                 fi
             fi
         else
@@ -689,11 +782,11 @@ parse_usage() {
             fi
         fi
     fi
-    
+
     # Footer
     echo ""
     if [[ "$USE_COLOR" == "true" ]]; then
-        echo "${bold}${blue}════════════════════════════════════════════════════════════${reset}"
+        echo "${bold}${bright_cyan}════════════════════════════════════════════════════════════${reset}"
     else
         echo "════════════════════════════════════════════════════════════"
     fi
@@ -706,26 +799,26 @@ main() {
     if ! command -v jq >/dev/null 2>&1; then
         error_exit "The 'jq' command is required for JSON parsing. Please install jq."
     fi
-    
+
     echo "Retrieving GitHub Copilot usage information..."
     echo
-    
+
     # Get GitHub token
     local github_token
     if ! github_token=$(get_github_token); then
         exit 1
     fi
-    
+
     # Get GitHub username
     local github_login
     github_login=$(get_github_username "$github_token")
-    
+
     # Get usage data
     local usage_data
     if ! usage_data=$(get_copilot_usage "$github_token"); then
         error_exit "Failed to retrieve Copilot usage information."
     fi
-    
+
     # Parse and display usage
     parse_usage "$usage_data" "$github_login"
 }
