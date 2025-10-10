@@ -154,6 +154,86 @@ export GITHUB_TOKEN="ghu_your_token_here"
 
 ---
 
+## 🎓 Free Access to GitHub Copilot Pro for Educators
+
+GitHub Education offers **free access to GitHub Copilot Pro** for verified teachers and educators. This provides you with premium features at no cost!
+
+### 📋 Eligibility & Benefits
+
+Teachers and educators can get:
+- ✨ **Full GitHub Copilot Pro subscription** at no cost
+- 🤖 Access to premium models (Claude Sonnet 4.5, GPT-5)
+- ⚡ Higher premium request limits
+- 🎯 All Copilot Pro features
+
+### 🚀 How to Get Free Access
+
+Follow these steps to obtain your free Copilot Pro subscription:
+
+<details open>
+<summary><b>Step 1: Apply to GitHub Education as a Teacher</b></summary>
+
+<br>
+
+Visit the GitHub Education application page and submit your teacher verification:
+
+📝 **[Apply to GitHub Education as a Teacher](https://docs.github.com/en/education/explore-the-benefits-of-teaching-and-learning-with-github-education/github-education-for-teachers/apply-to-github-education-as-a-teacher)**
+
+You'll need to provide:
+- Proof of academic affiliation
+- School-issued email address or other documentation
+- Information about how you'll use GitHub in teaching
+
+</details>
+
+<details open>
+<summary><b>Step 2: Join GitHub Education</b></summary>
+
+<br>
+
+After your application is approved:
+1. 📧 You'll receive an invitation email from GitHub Education
+2. ✅ Follow the link in the email to accept and join GitHub Education
+3. 🎓 Your account will be verified as an educator
+
+</details>
+
+<details open>
+<summary><b>Step 3: Start Your Copilot Pro Trial</b></summary>
+
+<br>
+
+Once you're verified:
+1. 🌐 Visit [GitHub Copilot Plans](https://github.com/features/copilot/plans)
+2. 💎 Start a free trial of **Copilot Pro**
+3. 🎯 Complete the subscription setup
+
+</details>
+
+<details open>
+<summary><b>Step 4: Receive Confirmation</b></summary>
+
+<br>
+
+Shortly after starting your trial:
+1. 📧 You'll receive an email titled **"Accessing your free Copilot subscription"**
+2. 💰 GitHub will send you a refund receipt for your subscription
+3. ✨ Your free access is automatically activated—no additional steps needed!
+
+> **🎉 Success!** As a verified educator, you now have free access to GitHub Copilot Pro. The subscription will remain free as long as you maintain your GitHub Education status.
+
+</details>
+
+### 📚 Additional Information
+
+For more details about the free access program:
+
+📖 **[Get Free Access to Copilot Pro](https://docs.github.com/en/copilot/how-tos/manage-your-account/get-free-access-to-copilot-pro)**
+
+> **💡 Note:** You must maintain active GitHub Education status to continue receiving free access. Renew your verification periodically as required by GitHub Education.
+
+---
+
 ## 💻 Usage Guide
 
 ### 🎯 Quick Start
