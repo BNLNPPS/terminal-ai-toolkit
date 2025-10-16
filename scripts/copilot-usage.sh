@@ -5,7 +5,7 @@
 # Author: Shuwei Ye, yesw@bnl.gov
 # Date: 2025-10-01
 
-readonly SCRIPT_VERSION="20251009-r1"
+readonly SCRIPT_VERSION="20251016-r1"
 
 # Check if script is being sourced (should be executed directly)
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]]; then
@@ -660,9 +660,9 @@ parse_usage() {
 
         # Available models for free subscription
         if [[ "$USE_COLOR" == "true" ]]; then
-            echo "${bold}🤖 Available Models: ${cyan}claude-Sonnet-4, gpt-5${reset}"
+            echo "${bold}🤖 Available Models: ${cyan}claude-sonnet-4.5, claude-sonnet-4, gpt-5${reset}"
         else
-            echo "Available Models: claude-sonnet-4, gpt-5"
+            echo "Available Models: claude-sonnet-4.5, claude-sonnet-4, gpt-5"
         fi
         echo ""
 

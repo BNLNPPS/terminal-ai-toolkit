@@ -255,12 +255,13 @@ By default, Copilot uses **Claude Sonnet 4**. Switch models using the `--model` 
 
 #### Available Models by Subscription
 
-| Subscription Type | Available Models |
-|:-----------------|:-----------------|
-| 💎 **Non-free** | • Claude Sonnet 4.5<br> • Claude Sonnet 4<br> • GPT-5 |
-| 🆓 **Free** | • Claude Sonnet 4<br> • GPT-5 |
+All subscription types now have access to the same models:
 
-> **📌 Note:** Model availability depends on your subscription tier.
+| Available Models |
+|:-----------------|
+| • Claude Sonnet 4.5<br> • Claude Sonnet 4<br> • GPT-5 |
+
+> **📌 Note:** All Copilot subscription types (Free, Pro, Pro+, Business, Enterprise) have access to these models.
 
 ### 🎨 Common Use Cases
 
@@ -334,6 +335,8 @@ By default, Copilot uses **Claude Sonnet 4**. Switch models using the `--model` 
 Each prompt submitted to GitHub Copilot CLI consumes **one premium request** from your monthly quota.
 
 ### Subscription Tiers
+
+All subscription types have access to the same models (Claude Sonnet 4.5, Claude Sonnet 4, GPT-5).
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|

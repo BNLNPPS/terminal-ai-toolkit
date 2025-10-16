@@ -11,6 +11,29 @@
 
 ---
 
+## 📑 Table of Contents
+
+- [🌟 Overview](#overview)
+- [📜 Scripts](#scripts)
+- [🆓 Free API Providers](#free-api-providers)
+  - [💎 Gemini API](#gemini-api)
+  - [🐙 GitHub Models](#github-models)
+  - [🔀 OpenRouter](#openrouter)
+  - [⚡ Groq](#groq)
+  - [🚀 NVIDIA Build](#nvidia-build)
+- [💻 Local Model Providers](#local-model-providers)
+  - [🦙 Ollama](#ollama)
+  - [🧠 LM Studio](#lm-studio)
+- [🔀 API Proxies](#api-proxies)
+  - [🔄 Claude Code Router](#claude-code-router)
+  - [🌉 Copilot API Bridge](#copilot-api-bridge)
+- [📚 Detailed Tool Guides](#detailed-tool-guides)
+- [🖥️ AI-Enhanced Terminals](#ai-enhanced-terminals)
+  - [⚡ Warp Terminal](#warp-terminal)
+  - [🌊 Wave Terminal](#wave-terminal)
+
+---
+
 ## 🌟 Overview
 
 This repository is your **comprehensive guide** to getting the most out of AI tools in your terminal. It contains curated scripts, expert tips, and detailed guides for terminal-based AI development.
@@ -126,6 +149,26 @@ Available models from [Rate Limits](https://console.groq.com/docs/rate-limits) d
 - `moonshotai/kimi-k2-instruct-0905`
 
 **Setup:** 🔑 [Generate API Key](https://console.groq.com/keys)
+
+### 🚀 NVIDIA Build
+
+[NVIDIA Build](https://build.nvidia.com/models) provides **free API access** to a wide selection of AI models optimized on NVIDIA infrastructure.
+
+#### 🆓 Example Models Available
+
+| Model | Full Model Name | Link |
+|:------|:----------------|:-----|
+| Qwen3 Next 80B | `qwen/qwen3-next-80b-a3b-instruct` | [Try it](https://build.nvidia.com/qwen/qwen3-next-80b-a3b-instruct) |
+| Qwen3 Coder 480B | `qwen/qwen3-coder-480b-a35b-instruct` | [Try it](https://build.nvidia.com/qwen/qwen3-coder-480b-a35b-instruct) |
+| GPT-OSS 120B | `openai/gpt-oss-120b` | [Try it](https://build.nvidia.com/openai/gpt-oss-120b) |
+| Kimi K2 Instruct | `moonshotai/kimi-k2-instruct-0905` | [Try it](https://build.nvidia.com/moonshotai/kimi-k2-instruct-0905) |
+| DeepSeek V3.1 | `deepseek-ai/deepseek-v3_1` | [Try it](https://build.nvidia.com/deepseek-ai/deepseek-v3_1) |
+
+**Setup:**
+- 🔑 [Generate API Key](https://build.nvidia.com/settings/api-keys)
+- 🔍 [Browse All Models](https://build.nvidia.com/models)
+
+> **💡 Note:** Use the full model name (with namespace) when making API requests.
 
 ---
 
