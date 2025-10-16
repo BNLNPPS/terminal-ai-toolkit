@@ -162,7 +162,7 @@ GitHub Education offers **free access to GitHub Copilot Pro** for verified teach
 
 Teachers and educators can get:
 - ✨ **Full GitHub Copilot Pro subscription** at no cost
-- 🤖 Access to premium models (Claude Sonnet 4.5, GPT-5)
+- 🤖 Access to premium models (claude-sonnet-4.5, claude-sonnet-4, gpt-5)
 - ⚡ Higher premium request limits
 - 🎯 All Copilot Pro features
 
@@ -247,7 +247,7 @@ copilot
 
 ### 🧠 Model Selection
 
-By default, Copilot uses **Claude Sonnet 4**. Switch models using the `--model` flag or the `/model` command:
+By default, Copilot uses **claude-sonnet-4**. Switch models using the `--model` flag or the `/model` command:
 
 ```bash
 /model
@@ -259,7 +259,7 @@ All subscription types now have access to the same models:
 
 | Available Models |
 |:-----------------|
-| • Claude Sonnet 4.5<br> • Claude Sonnet 4<br> • GPT-5 |
+| • claude-sonnet-4.5<br> • claude-sonnet-4<br> • gpt-5 |
 
 > **📌 Note:** All Copilot subscription types (Free, Pro, Pro+, Business, Enterprise) have access to these models.
 
@@ -336,7 +336,7 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 
 ### Subscription Tiers
 
-All subscription types have access to the same models (Claude Sonnet 4.5, Claude Sonnet 4, GPT-5).
+All subscription types have access to the same models (claude-sonnet-4.5, claude-sonnet-4, gpt-5).
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|
@@ -414,7 +414,7 @@ The script checks for authentication in this order:
 
 📋 Subscription: copilot_pro 💎
 
-🤖 Available Models: Claude Sonnet 4.5, Claude Sonnet 4, GPT-5
+🤖 Available Models: claude-sonnet-4.5, claude-sonnet-4, gpt-5
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   ⚡ Premium Interactions
