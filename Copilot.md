@@ -162,7 +162,7 @@ GitHub Education offers **free access to GitHub Copilot Pro** for verified teach
 
 Teachers and educators can get:
 - ✨ **Full GitHub Copilot Pro subscription** at no cost
-- 🤖 Access to premium models (claude-sonnet-4.5, claude-sonnet-4, gpt-5)
+- 🤖 Access to premium models (claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5, gpt-5)
 - ⚡ Higher premium request limits
 - 🎯 All Copilot Pro features
 
@@ -255,13 +255,12 @@ By default, Copilot uses **claude-sonnet-4**. Switch models using the `--model` 
 
 #### Available Models by Subscription
 
-All subscription types now have access to the same models:
+| Subscription Type | Available Models |
+|:------------------|:-----------------|
+| 🆓 **Free** | claude-sonnet-4.5<br> • claude-sonnet-4<br> • gpt-5 |
+| ⭐ **Pro & Pro+** | claude-sonnet-4.5<br> • claude-sonnet-4<br> • claude-haiku-4.5 (1/3 premium cost)<br> • gpt-5 |
 
-| Available Models |
-|:-----------------|
-| • claude-sonnet-4.5<br> • claude-sonnet-4<br> • gpt-5 |
-
-> **📌 Note:** All Copilot subscription types (Free, Pro, Pro+, Business, Enterprise) have access to these models.
+> **📌 Note:** The `claude-haiku-4.5` model is only available for Pro and Pro+ subscriptions and consumes only 1/3 of a premium request.
 
 ### 🎨 Common Use Cases
 
@@ -336,7 +335,9 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 
 ### Subscription Tiers
 
-All subscription types have access to the same models (claude-sonnet-4.5, claude-sonnet-4, gpt-5).
+**Available Models:**
+- **Free Subscription:** claude-sonnet-4.5, claude-sonnet-4, gpt-5
+- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5 (1/3 premium cost), gpt-5
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|
@@ -414,7 +415,7 @@ The script checks for authentication in this order:
 
 📋 Subscription: copilot_pro 💎
 
-🤖 Available Models: claude-sonnet-4.5, claude-sonnet-4, gpt-5
+🤖 Available Models: claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5, gpt-5
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   ⚡ Premium Interactions
