@@ -170,6 +170,71 @@ Available models from [Rate Limits](https://console.groq.com/docs/rate-limits) d
 
 > **💡 Note:** Use the full model name (with namespace) when making API requests.
 
+### 🦙 Ollama Cloud Models
+
+Ollama now provides **cloud-hosted models** via API access, offering powerful AI capabilities without the need for local infrastructure. These models are accessible through a simple API and integrate seamlessly with popular AI coding tools.
+
+**💰 Pricing:**
+- 🆓 **Free Plan** - Available with hourly and daily usage limits
+- 📈 **Pay-per-use** - No upfront costs or hardware investment required
+
+#### 🆓 Available Cloud Models
+
+| Model | Full Name | Use Case |
+|:------|:----------|:---------|
+| 🤖 **DeepSeek V3.1** | `deepseek-v3.1:671b` | Advanced reasoning and code generation |
+| 🔥 **GPT-OSS 20B** | `gpt-oss:20b` | Efficient coding and text tasks |
+| 🚀 **GPT-OSS 120B** | `gpt-oss:120b` | High-capacity reasoning and analysis |
+| 🌙 **Kimi K2** | `kimi-k2:1t` | Long-context understanding and generation |
+| 💻 **Qwen3 Coder** | `qwen3-coder:480b` | Specialized code completion and programming |
+| ⚡ **GLM 4.6** | `glm-4.6` | Balanced performance for diverse tasks |
+| 🎯 **MiniMax M2** | `minimax-m2` | Optimized for productivity and speed |
+
+#### 🔗 Integration with AI Coding Tools
+
+Ollama Cloud Models integrate seamlessly with popular AI coding tools and IDEs through native integrations and OpenAI-compatible APIs:
+
+**🎯 Supported AI Coding Tools & IDEs:**
+
+| Tool | Integration Type | Documentation |
+|:-----|:-----------------|:--------------|
+| **VS Code** | Native Extension | [View Guide](https://docs.ollama.com/integrations/vscode) |
+| **JetBrains** | Native Plugin | [View Guide](https://docs.ollama.com/integrations/jetbrains) |
+| **Codex** | API Integration | [View Guide](https://docs.ollama.com/integrations/codex) |
+| **Cline** | API Integration | [View Guide](https://docs.ollama.com/integrations/cline) |
+| **Droid** | API Integration | [View Guide](https://docs.ollama.com/integrations/droid) |
+| **Goose** | API Integration | [View Guide](https://docs.ollama.com/integrations/goose) |
+| **Zed** | Native Extension | [View Guide](https://docs.ollama.com/integrations/zed) |
+
+**Key Benefits:**
+- **OpenAI-compatible API** - Use existing OpenAI client libraries
+- **Direct terminal integration** - Run queries from command line
+- **No local setup required** - Access powerful models via API
+- **Cost-effective** - Pay-per-use without hardware investment
+- **Zero local storage** - Models run in the cloud
+
+**Example API Usage:**
+
+```bash
+# Query via REST API
+curl https://api.ollama.ai/v1/chat/completions \
+  -H "Authorization: Bearer ${OLLAMA_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen3-coder:480b",
+    "messages": [
+      {"role": "user", "content": "Write a Python function to parse JSON"}
+    ]
+  }'
+```
+
+**Setup:**
+- 🔑 [Generate API Key](https://ollama.ai/cloud)
+- 📚 [View Documentation](https://docs.ollama.com/cloud)
+- 🆓 **Free Plan Available** - Includes hourly and daily usage limits
+
+> **💡 Pro Tip:** Most integrations support both local and cloud models. For cloud models, append `-cloud` to the model name in your tool's configuration.
+
 ---
 
 ## 💻 Local Model Providers
@@ -185,6 +250,41 @@ Available models from [Rate Limits](https://console.groq.com/docs/rate-limits) d
 - 🤖 Popular models: LLaMA, Gemma, DeepSeek
 - 🔌 OpenAI-compatible API
 - 🖥️ Cross-platform support
+
+#### ☁️ Cloud Models
+
+Access Ollama's cloud-hosted models locally using the same CLI interface. Simply append `-cloud` (or `:cloud` for some models) to the model name when pulling or running models.
+
+**Available Cloud Models:**
+
+| Local Model Name | Cloud Model |
+|:-----------------|:-----------|
+| `deepseek-v3.1:671b-cloud` | `deepseek-v3.1:671b` |
+| `gpt-oss:20b-cloud` | `gpt-oss:20b` |
+| `gpt-oss:120b-cloud` | `gpt-oss:120b` |
+| `kimi-k2:1t-cloud` | `kimi-k2:1t` |
+| `qwen3-coder:480b-cloud` | `qwen3-coder:480b` |
+| `glm-4.6:cloud` | `glm-4.6` |
+| `minimax-m2:cloud` | `minimax-m2` |
+
+**Usage Example:**
+
+```bash
+# Pull a cloud model (stored locally for faster access)
+ollama pull qwen3-coder:480b-cloud
+
+# Run the model
+ollama run qwen3-coder:480b-cloud
+```
+
+**Key Benefits:**
+- 🚀 **Zero local storage** - Models run in the cloud
+- ⚡ **Faster startup** - No download or local VRAM requirements
+- 🔄 **Same CLI experience** - Use familiar `ollama run/pull` commands
+- 💰 **Pay-per-use** - No hardware investment needed
+- 🌍 **Always up-to-date** - Access to latest model versions
+
+> **💡 Note:** Cloud models require an active internet connection and an Ollama Cloud account. Sign in with `ollama signin` to authenticate your account.
 
 #### 📊 Ollama Model Performance
 
