@@ -475,6 +475,17 @@ copilot-api start
 
 The `copilot-api` tool is also available in specialized environments like the modern-linuxtools Singularity image on CVMFS.
 
+**CVMFS Setup:**
+
+```bash
+# Setup the environment
+source /cvmfs/atlas.sdcc.bnl.gov/users/yesw/singularity/alma9-x86/modern-linuxtools/setupMe.sh
+
+# Then use copilot-api as normal
+copilot-api auth
+copilot-api start
+```
+
 <details>
 <summary><b>💻 Usage Examples</b></summary>
 
