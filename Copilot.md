@@ -557,6 +557,7 @@ node --version
 | 💳 [Copilot Plans](https://github.com/features/copilot/plans) | Subscription options |
 | 💰 [Individual Plans & Benefits](https://docs.github.com/en/copilot/concepts/billing/individual-plans) | Detailed pricing info |
 | ⚡ [About Premium Requests](https://docs.github.com/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests) | Usage & quota details |
+| 🔀 [Model Multipliers](https://docs.github.com/en/copilot/concepts/billing/copilot-requests#model-multipliers) | Models with zero multiplier (not counted toward premium usage) |
 
 </div>
 

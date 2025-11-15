@@ -18,6 +18,8 @@
 - [🆓 Free API Providers](#-free-api-providers)
   - [💎 Gemini API](#-gemini-api)
   - [🐙 GitHub Models](#-github-models)
+    - [🤖 GitHub Copilot Models](#-github-copilot-models)
+    - [🛒 GitHub Market Models](#-github-market-models)
   - [🔀 OpenRouter](#-openrouter)
   - [⚡ Groq](#-groq)
   - [🚀 NVIDIA Build](#-nvidia-build)
@@ -72,15 +74,28 @@ Access powerful Google Gemini models with generous free tier limits:
 
 GitHub provides two types of AI model access for developers:
 
-<details>
-<summary><b>🤖 GitHub Copilot Models</b></summary>
+- 🤖 GitHub Copilot Models
+- 🛒 GitHub Market Models
 
-<br>
+#### 🤖 GitHub Copilot Models
 
 **Overview:**
 - 🌐 **Endpoint:** `https://api.githubcopilot.com`
 - 📖 **Documentation:** [Supported Models](https://docs.github.com/en/copilot/reference/ai-models/supported-models)
-- ⚡ **Rate Limits:** 300 premium requests/month (Copilot Pro)
+- ⚡ **Rate Limits:** see [Individual Plan Comparison](https://docs.github.com/en/copilot/concepts/billing/individual-plans#comparing-plans)
+
+**Premium request limits (per month):**
+
+| Feature             | GitHub Copilot Free | GitHub Copilot Pro | GitHub Copilot Pro+ |
+|:--------------------|:--------------------|:-------------------|:--------------------|
+| Premium requests    | 0 per month         | 300 per month      | 1,500 per month     |
+
+> ℹ️ Exact limits and availability may change over time—always confirm via the official docs above.
+
+**Model multipliers:**
+
+- 📖 [Model Multipliers Documentation](https://docs.github.com/en/copilot/concepts/billing/copilot-requests#model-multipliers)
+- Models (accessible via API) with a **0× multiplier** for non-free plans (not counted toward premium usage): `gpt-4.1`, `gpt-5-mini`, `gpt-4o`
 
 **List available models:**
 
@@ -91,12 +106,7 @@ curl -L \
   https://api.githubcopilot.com/models | jq -r '.data[].id'
 ```
 
-</details>
-
-<details>
-<summary><b>🛒 GitHub Market Models</b></summary>
-
-<br>
+#### 🛒 GitHub Market Models
 
 **Overview:**
 - 🌐 **Endpoint:** `https://models.github.ai/inference`
@@ -112,8 +122,6 @@ curl -L \
   -H "X-GitHub-Api-Version: 2022-11-28" \
   https://models.github.ai/catalog/models | jq -r '.[].id'
 ```
-
-</details>
 
 ### 🔀 OpenRouter
 
@@ -447,29 +455,37 @@ ccr restart
 
 ### 🌉 Copilot API Bridge
 
-**[copilot-api](https://github.com/ericc-ch/copilot-api)** - Converts GitHub Copilot into OpenAI/Anthropic API compatible server for use with Claude Code.
+The GitHub Copilot API (https://api.githubcopilot.com) does not provide direct access for most third‑party AI integrations.
+**[copilot‑api](https://github.com/ericc-ch/copilot-api)**, an open‑source proxy,
+provides the necessary bridge: it exposes an OpenAI‑compatible interface as well as an Anthropic‑compatible interface,
+at the endpoint **https://localhost:4141**.
+
+**Installation and Authentication:**
+
+```bash
+# Install copilot-api globally
+npm install -g copilot-api
+
+# Device authentication
+copilot-api auth
+
+# Start the API proxy
+copilot-api start
+```
+
+The `copilot-api` tool is also available in specialized environments like the modern-linuxtools Singularity image on CVMFS.
 
 <details>
-<summary><b>🚀 Deployment Example (Singularity/CVMFS)</b></summary>
+<summary><b>💻 Usage Examples</b></summary>
 
 <br>
 
-The `copilot-api` tool is available in the modern-linuxtools Singularity image on CVMFS:
-
 ```bash
-# Setup the environment
-$ source /cvmfs/atlas.sdcc.bnl.gov/users/yesw/singularity/alma9-x86/modern-linuxtools/setupMe.sh
+# Use with Aider
+export ANTHROPIC_BASE_URL=http://localhost:4141 && aider --no-git --anthropic-api-key dummy --model anthropic/claude-sonnet-4.5
 
-# Start the API wrapper
-$ copilot-api start -c
-[...]
-  ➜ Listening on: http://130.199.48.146:4141/
-
-# In another terminal, use with Aider
-$ export ANTHROPIC_BASE_URL=http://130.199.48.146:4141 && aider --no-git --anthropic-api-key dummy --model anthropic/claude-sonnet-4
-
-# Or use with Claude Code CLI (also included in modern-linuxtools)
-$ export ANTHROPIC_BASE_URL=http://130.199.48.146:4141 && claude-code
+# Or use with Claude Code CLI
+export ANTHROPIC_BASE_URL=http://localhost:4141 ANTHROPIC_AUTH_TOKEN=dummy ANTHROPIC_MODEL=claude-sonnet-4.5 && claude-code
 ```
 
 </details>

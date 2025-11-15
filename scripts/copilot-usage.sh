@@ -722,11 +722,15 @@ parse_usage() {
 
         # Available models for non-free subscription
         if [[ "$USE_COLOR" == "true" ]]; then
-            echo "${bold}🤖 Available Models: ${cyan}claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5, gpt-5${reset}"
-            echo "${bold}  ${cyan}• claude-haiku-4.5 ${yellow}(1/3 premium cost)${reset}${cyan}${reset}"
+            echo "${bold}🤖 Available Models:${reset}"
+            echo "${bold}  ${cyan}claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5${reset}"
+            echo "${bold}  ${cyan}gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex${reset}"
+            echo "${bold}  ${cyan}• claude-haiku-4.5 and gpt-5.1-codex-mini${yellow}(1/3 premium cost)${reset}"
         else
-            echo "Available Models: claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5, gpt-5"
-            echo "  • claude-haiku-4.5 (1/3 premium cost)"
+            echo "Available Models:"
+            echo "  claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5"
+            echo "  gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex"
+            echo "  • claude-haiku-4.5 and gpt-5.1-codex-mini (1/3 premium cost)"
         fi
         echo ""
 
