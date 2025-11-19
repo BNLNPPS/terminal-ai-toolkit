@@ -15,13 +15,13 @@ set -e  # Exit on any error
 # Note: Removed 'set -u' to avoid conflicts with nvm.sh which has undefined variables
 
 # Configuration
-readonly SCRIPT_VERSION="20251006-r1"
+readonly SCRIPT_VERSION="20251119-r1"
 COPILOT_API_PORT=8181
 COPILOT_API_URL="http://localhost:${COPILOT_API_PORT}"
 
 # Default values
 readonly NVM_INSTALL_URL="https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh"
-readonly FREE_DEFAULT_MODEL="claude-3.5-sonnet"
+readonly FREE_DEFAULT_MODEL="claude-haiku-4.5"
 readonly PREMIUM_DEFAULT_MODEL="claude-sonnet-4"
 DEFAULT_MODEL=""  # Selected from available models; falls back to FREE_DEFAULT_MODEL
 MODEL_NAME=""
@@ -938,6 +938,7 @@ list_models() {
       if [[ -n "$models" ]]; then
         echo ""
         echo "${bold}${blue}📋 Available models:${reset}"
+        echo "${yellow}Note: Not all listed models may be accessible. Please verify by trying them first.${reset}"
         echo "$models" | while IFS= read -r model; do
           if [[ -n "$model" ]]; then
             echo "  ${cyan}•${reset} $model"
@@ -1221,6 +1222,7 @@ main() {
     # Print available models for user reference
     if [[ ${#models[@]} -gt 0 ]]; then
       echo "${bold}${blue}📋 Available models:${reset}"
+      echo "${yellow}Note: Not all listed models may be accessible. Please verify by trying them first.${reset}"
       for model in "${models[@]}"; do
         if [[ "$model" == "$MODEL_NAME" ]]; then
           echo "  ${green}${bold}✓${reset} $model ${green}(selected)${reset}"

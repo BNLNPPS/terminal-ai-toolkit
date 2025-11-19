@@ -5,7 +5,7 @@
 # Author: Shuwei Ye, yesw@bnl.gov
 # Date: 2025-10-01
 
-readonly SCRIPT_VERSION="20251016-r1"
+readonly SCRIPT_VERSION="20251119-r1"
 
 # Check if script is being sourced (should be executed directly)
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]]; then
@@ -725,11 +725,13 @@ parse_usage() {
             echo "${bold}🤖 Available Models:${reset}"
             echo "${bold}  ${cyan}claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5${reset}"
             echo "${bold}  ${cyan}gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex${reset}"
+            echo "${bold}  ${cyan}gemini-3-pro-preview${reset}"
             echo "${bold}  ${cyan}• claude-haiku-4.5 and gpt-5.1-codex-mini${yellow}(1/3 premium cost)${reset}"
         else
             echo "Available Models:"
             echo "  claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5"
             echo "  gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex"
+            echo "  gemini-3-pro-preview"
             echo "  • claude-haiku-4.5 and gpt-5.1-codex-mini (1/3 premium cost)"
         fi
         echo ""
