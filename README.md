@@ -61,11 +61,10 @@ Useful scripts to enhance your AI terminal workflow:
 
 Access powerful Google Gemini models with generous free tier limits:
 
-| Feature | Free Tier |
-|:--------|:----------|
-| 🚀 **Model** | Gemini 2.5 Pro |
-| ⚡ **Rate Limit** | 5 requests/minute |
-| 📅 **Daily Limit** | 100 requests/day |
+| Feature | Gemini 2.5 Pro (Free) | Gemini 2.5 Flash (Free) |
+|:--------|:----------------------|:------------------------|
+| ⚡ **Rate Limit** | 2 requests/minute | 15 requests/minute |
+| 📅 **Daily Limit** | 50 requests/day | 1,500 requests/day |
 
 - 📚 [Rate Limits Documentation](https://ai.google.dev/gemini-api/docs/rate-limits)
 - 🔑 [Create API Key](https://aistudio.google.com/app/apikey)
@@ -138,6 +137,7 @@ curl -L \
 | GLM 4.5 Air | [Try it](https://openrouter.ai/z-ai/glm-4.5-air:free) |
 | Kimi K2 | [Try it](https://openrouter.ai/moonshotai/kimi-k2:free) |
 | DeepSeek Chat v3.1 | [Try it](https://openrouter.ai/deepseek/deepseek-chat-v3.1:free) |
+| Grok 4.1 Fast | [Try it](https://openrouter.ai/x-ai/grok-4.1-fast:free) |
 
 **Setup:** 🔑 [Generate API Key](https://openrouter.ai/settings/keys)
 
@@ -173,6 +173,7 @@ Available models from [Rate Limits](https://console.groq.com/docs/rate-limits) d
 | GPT-OSS 120B | `openai/gpt-oss-120b` | [Try it](https://build.nvidia.com/openai/gpt-oss-120b) |
 | Kimi K2 Instruct | `moonshotai/kimi-k2-instruct-0905` | [Try it](https://build.nvidia.com/moonshotai/kimi-k2-instruct-0905) |
 | DeepSeek V3.1 | `deepseek-ai/deepseek-v3_1` | [Try it](https://build.nvidia.com/deepseek-ai/deepseek-v3_1) |
+| MiniMax M2 | `minimaxai/minimax-m2` | [Try it](https://build.nvidia.com/minimaxai/minimax-m2) |
 
 **Setup:**
 - 🔑 [Generate API Key](https://build.nvidia.com/settings/api-keys)
@@ -189,6 +190,8 @@ Ollama now provides **cloud-hosted models** via API access, offering powerful AI
 - 📈 **Pay-per-use** - No upfront costs or hardware investment required
 
 #### 🆓 Available Cloud Models
+
+> 🔍 [Search all cloud models](https://ollama.com/search?c=cloud)
 
 | Model | Full Name | Use Case |
 |:------|:----------|:---------|

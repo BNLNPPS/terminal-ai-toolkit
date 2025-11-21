@@ -257,8 +257,8 @@ By default, Copilot uses **claude-sonnet-4**. Switch models using the `--model` 
 
 | Subscription Type | Available Models |
 |:------------------|:-----------------|
-| 🆓 **Free** | claude-sonnet-4.5<br> • claude-sonnet-4<br> • gpt-5 |
-| ⭐ **Pro & Pro+** | claude-sonnet-4.5<br> • claude-sonnet-4<br> • claude-haiku-4.5 (1/3 premium cost)<br> • gpt-5 |
+| 🆓 **Free** | claude-haiku-4.5 |
+| ⭐ **Pro & Pro+** | claude-sonnet-4.5<br> • claude-sonnet-4<br> • claude-haiku-4.5 (1/3 premium cost)<br> • gpt-5<br> • gpt-5.1<br> • gpt-5.1-codex-mini<br> • gpt-5.1-codex<br> • gemini-3-pro-preview |
 
 > **📌 Note:** The `claude-haiku-4.5` model is only available for Pro and Pro+ subscriptions and consumes only 1/3 of a premium request.
 
@@ -336,8 +336,8 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 ### Subscription Tiers
 
 **Available Models:**
-- **Free Subscription:** claude-sonnet-4.5, claude-sonnet-4, gpt-5
-- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5 (1/3 premium cost), gpt-5
+- **Free Subscription:** claude-haiku-4.5
+- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5 (1/3 premium cost), gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex, gemini-3-pro-preview
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|
@@ -411,20 +411,23 @@ The script checks for authentication in this order:
   👤 User: yourusername
 ════════════════════════════════════════════════════════════
 
-📅 Next Reset Date: 2025-11-01T00:00:00Z
+📅 Next Reset Date: 2025-12-01T00:00:00Z
 
 📋 Subscription: copilot_pro 💎
 
-🤖 Available Models: claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5, gpt-5
+Available Models:
+  claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5
+  gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex
+  gemini-3-pro-preview
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   ⚡ Premium Interactions
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   Monthly Quota: 300
-  Used:          125
+  Used:          67
 
-  ⚡ Remaining Premium Requests: 175
+  ⚡ Remaining Premium Requests: 233
 
 ════════════════════════════════════════════════════════════
 ```
