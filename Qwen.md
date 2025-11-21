@@ -159,6 +159,15 @@ qwen
 
 </details>
 
+### 🛠️ CLI Reference
+
+| Flag | Description |
+|:-----|:------------|
+| `--screen-reader` | Enable screen reader mode for accessibility |
+| `--vlm-switch-mode` | Control behavior when images are detected (`once`, `session`, `persist`) |
+| `--output-format` | Set output format (`text`, `json`) |
+
+
 ---
 
 ## 🔐 Authentication

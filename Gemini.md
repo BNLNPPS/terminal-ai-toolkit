@@ -179,6 +179,16 @@ gemini
 
 </details>
 
+### 🛠️ CLI Reference
+
+| Flag | Description |
+|:-----|:------------|
+| `--include-directories` | Add additional directories to the workspace context |
+| `--screen-reader` | Enable screen reader mode for accessibility |
+| `--output-format` | Set output format (`text`, `json`, `stream-json`) |
+| `--list-sessions` | List available sessions |
+
+
 ---
 
 <div align="center">
