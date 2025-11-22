@@ -260,7 +260,7 @@ By default, Copilot uses **claude-sonnet-4**. Switch models using the `--model` 
 | 🆓 **Free** | claude-haiku-4.5 |
 | ⭐ **Pro & Pro+** | claude-sonnet-4.5<br> • claude-sonnet-4<br> • claude-haiku-4.5 (1/3 premium cost)<br> • gpt-5<br> • gpt-5.1<br> • gpt-5.1-codex-mini (1/3 premium cost)<br> • gpt-5.1-codex<br> • gemini-3-pro-preview |
 
-> **📌 Note:** The `claude-haiku-4.5` and 'gpt-5.1-codex-mini' models consume only 1/3 of a premium request for Pro and Pro+ subscriptions.
+> **📌 Note:** The `claude-haiku-4.5` and `gpt-5.1-codex-mini` models consume only 1/3 of a premium request for Pro and Pro+ subscriptions.
 
 ### 🎨 Common Use Cases
 
