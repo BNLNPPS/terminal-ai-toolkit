@@ -162,7 +162,7 @@ GitHub Education offers **free access to GitHub Copilot Pro** for verified teach
 
 Teachers and educators can get:
 - ✨ **Full GitHub Copilot Pro subscription** at no cost
-- 🤖 Access to premium models (claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5, gpt-5)
+- 🤖 Access to premium models (claude-sonnet-4.5, gpt-5.1)
 - ⚡ Higher premium request limits
 - 🎯 All Copilot Pro features
 
@@ -258,9 +258,9 @@ By default, Copilot uses **claude-sonnet-4**. Switch models using the `--model` 
 | Subscription Type | Available Models |
 |:------------------|:-----------------|
 | 🆓 **Free** | claude-haiku-4.5 |
-| ⭐ **Pro & Pro+** | claude-sonnet-4.5<br> • claude-sonnet-4<br> • claude-haiku-4.5 (1/3 premium cost)<br> • gpt-5<br> • gpt-5.1<br> • gpt-5.1-codex-mini<br> • gpt-5.1-codex<br> • gemini-3-pro-preview |
+| ⭐ **Pro & Pro+** | claude-sonnet-4.5<br> • claude-sonnet-4<br> • claude-haiku-4.5 (1/3 premium cost)<br> • gpt-5<br> • gpt-5.1<br> • gpt-5.1-codex-mini (1/3 premium cost)<br> • gpt-5.1-codex<br> • gemini-3-pro-preview |
 
-> **📌 Note:** The `claude-haiku-4.5` model is only available for Pro and Pro+ subscriptions and consumes only 1/3 of a premium request.
+> **📌 Note:** The `claude-haiku-4.5` and 'gpt-5.1-codex-mini' models consume only 1/3 of a premium request for Pro and Pro+ subscriptions.
 
 ### 🎨 Common Use Cases
 
@@ -337,7 +337,7 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 
 **Available Models:**
 - **Free Subscription:** claude-haiku-4.5
-- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5 (1/3 premium cost), gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex, gemini-3-pro-preview
+- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5 (1/3 premium cost), gpt-5, gpt-5.1, gpt-5.1-codex-mini (1/3 premium cost), gpt-5.1-codex, gemini-3-pro-preview
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|
