@@ -23,6 +23,7 @@
   - [🔀 OpenRouter](#-openrouter)
   - [⚡ Groq](#-groq)
   - [🚀 NVIDIA Build](#-nvidia-build)
+  - [🦙 Ollama Cloud Models](#-ollama-cloud-models)
 - [💻 Local Model Providers](#-local-model-providers)
   - [🦙 Ollama](#-ollama)
   - [🧠 LM Studio](#-lm-studio)
@@ -264,40 +265,16 @@ curl https://api.ollama.ai/v1/chat/completions \
 - 🔌 OpenAI-compatible API
 - 🖥️ Cross-platform support
 
-#### ☁️ Cloud Models
+#### ☁️ Access to Cloud Models
 
-Access Ollama's cloud-hosted models locally using the same CLI interface. Simply append `-cloud` (or `:cloud` for some models) to the model name when pulling or running models.
-
-**Available Cloud Models:**
-
-| Local Model Name | Cloud Model |
-|:-----------------|:-----------|
-| `deepseek-v3.1:671b-cloud` | `deepseek-v3.1:671b` |
-| `gpt-oss:20b-cloud` | `gpt-oss:20b` |
-| `gpt-oss:120b-cloud` | `gpt-oss:120b` |
-| `kimi-k2:1t-cloud` | `kimi-k2:1t` |
-| `qwen3-coder:480b-cloud` | `qwen3-coder:480b` |
-| `glm-4.6:cloud` | `glm-4.6` |
-| `minimax-m2:cloud` | `minimax-m2` |
-
-**Usage Example:**
+Ollama also provides access to cloud-hosted models via the `ollama` command. Simply append `-cloud` (or `:cloud` for some models) to the model name:
 
 ```bash
-# Pull a cloud model (stored locally for faster access)
-ollama pull qwen3-coder:480b-cloud
-
-# Run the model
+# Example: Run a cloud-hosted model
 ollama run qwen3-coder:480b-cloud
 ```
 
-**Key Benefits:**
-- 🚀 **Zero local storage** - Models run in the cloud
-- ⚡ **Faster startup** - No download or local VRAM requirements
-- 🔄 **Same CLI experience** - Use familiar `ollama run/pull` commands
-- 💰 **Pay-per-use** - No hardware investment needed
-- 🌍 **Always up-to-date** - Access to latest model versions
-
-> **💡 Note:** Cloud models require an active internet connection and an Ollama Cloud account. Sign in with `ollama signin` to authenticate your account.
+For details, see the [🦙 Ollama Cloud Models](#-ollama-cloud-models) section.
 
 #### 📊 Ollama Model Performance
 

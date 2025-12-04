@@ -257,10 +257,10 @@ By default, Copilot uses **claude-sonnet-4**. Switch models using the `--model` 
 
 | Subscription Type | Available Models |
 |:------------------|:-----------------|
-| 🆓 **Free** | claude-haiku-4.5 |
-| ⭐ **Pro & Pro+** | claude-sonnet-4.5<br> • claude-sonnet-4<br> • claude-haiku-4.5 (1/3 premium cost)<br> • gpt-5<br> • gpt-5.1<br> • gpt-5.1-codex-mini (1/3 premium cost)<br> • gpt-5.1-codex<br> • gemini-3-pro-preview |
+| 🆓 **Free** | claude-haiku-4.5 (default)<br> • gpt-5-mini<br> • gpt-4.1 |
+| ⭐ **Pro & Pro+** | claude-sonnet-4.5 (default)<br> • claude-haiku-4.5 (0.33x)<br> • claude-sonnet-4<br> • gpt-5.1<br> • gpt-5.1-codex-mini (0.33x)<br> • gpt-5.1-codex<br> • gpt-5<br> • gpt-5-mini (0x)<br> • gpt-4.1 (0x)<br> • gemini-3-pro-preview |
 
-> **📌 Note:** The `claude-haiku-4.5` and `gpt-5.1-codex-mini` models consume only 1/3 of a premium request for Pro and Pro+ subscriptions.
+> **📌 Note:** Models with multipliers: `claude-haiku-4.5` and `gpt-5.1-codex-mini` (0.33x), `gpt-5-mini` and `gpt-4.1` (0x for non-free subscriptions).
 
 ### 🎨 Common Use Cases
 
@@ -336,8 +336,8 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 ### Subscription Tiers
 
 **Available Models:**
-- **Free Subscription:** claude-haiku-4.5
-- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5 (1/3 premium cost), gpt-5, gpt-5.1, gpt-5.1-codex-mini (1/3 premium cost), gpt-5.1-codex, gemini-3-pro-preview
+- **Free Subscription:** claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1
+- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5 (default), claude-haiku-4.5 (0.33x), claude-sonnet-4, gpt-5.1, gpt-5.1-codex-mini (0.33x), gpt-5.1-codex, gpt-5, gpt-5-mini (0x), gpt-4.1 (0x), gemini-3-pro-preview
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|

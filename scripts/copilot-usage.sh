@@ -5,7 +5,7 @@
 # Author: Shuwei Ye, yesw@bnl.gov
 # Date: 2025-10-01
 
-readonly SCRIPT_VERSION="20251121-r1"
+readonly SCRIPT_VERSION="20251204-r1"
 
 # Check if script is being sourced (should be executed directly)
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]]; then
@@ -660,9 +660,11 @@ parse_usage() {
 
         # Available models for free subscription
         if [[ "$USE_COLOR" == "true" ]]; then
-            echo "${bold}🤖 Available Models: ${cyan}claude-haiku-4.5${reset}"
+            echo "${bold}🤖 Available Models:${reset}"
+            echo "  ${cyan}claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1${reset}"
         else
-            echo "Available Models: claude-haiku-4.5"
+            echo "Available Models:"
+            echo "  claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1"
         fi
         echo ""
 
@@ -723,16 +725,14 @@ parse_usage() {
         # Available models for non-free subscription
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}🤖 Available Models:${reset}"
-            echo "${bold}  ${cyan}claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5${reset}"
-            echo "${bold}  ${cyan}gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex${reset}"
-            echo "${bold}  ${cyan}gemini-3-pro-preview${reset}"
-            echo "${bold}  ${cyan}• claude-haiku-4.5 and gpt-5.1-codex-mini${yellow}(1/3 premium cost)${reset}"
+            echo "  ${cyan}claude-sonnet-4.5 (default), claude-haiku-4.5 (0.33x), claude-sonnet-4${reset}"
+            echo "  ${cyan}gpt-5.1, gpt-5.1-codex-mini (0.33x), gpt-5.1-codex, gpt-5${reset}"
+            echo "  ${cyan}gpt-5-mini (0x), gpt-4.1 (0x), gemini-3-pro-preview${reset}"
         else
             echo "Available Models:"
-            echo "  claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5"
-            echo "  gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex"
-            echo "  gemini-3-pro-preview"
-            echo "  • claude-haiku-4.5 and gpt-5.1-codex-mini (1/3 premium cost)"
+            echo "  claude-sonnet-4.5 (default), claude-haiku-4.5 (0.33x), claude-sonnet-4"
+            echo "  gpt-5.1, gpt-5.1-codex-mini (0.33x), gpt-5.1-codex, gpt-5"
+            echo "  gpt-5-mini (0x), gpt-4.1 (0x), gemini-3-pro-preview"
         fi
         echo ""
 
