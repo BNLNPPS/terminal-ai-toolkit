@@ -605,12 +605,12 @@ Available as: Snap, AppImage, .deb, .rpm, and Windows installers
 - 🧠 **Built-in AI Chat:** Interact with LLMs directly within iTerm2 windows
 - ✍️ **Command Composer:** Describe what you want to do in English, and it generates the shell command
 - 🔍 **Code Explanation:** Highlight output or commands to get instant explanations
-- 🔑 **BYOK:** Bring Your Own Key (OpenAI API) for privacy and control
+- 🔑 **BYOK:** Bring Your Own Key (OpenAI, Gemini, etc.) for privacy and control
 
 **📦 Setup:**
 1. Install iTerm2 (v3.5+)
 2. Install the AI plugin (Settings > General > AI > Install)
-3. Enter your OpenAI API key
+3. Configure your provider (OpenAI, Gemini, etc.) and API key
 4. Use `Cmd-Y` to open the AI Composer
 
 ### 🧩 TmuxAI
