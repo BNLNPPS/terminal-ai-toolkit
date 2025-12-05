@@ -34,6 +34,8 @@
 - [🖥️ AI-Enhanced Terminals](#%EF%B8%8F-ai-enhanced-terminals)
   - [⚡ Warp Terminal](#-warp-terminal)
   - [🌊 Wave Terminal](#-wave-terminal)
+  - [📟 iTerm2 AI](#-iterm2-ai)
+  - [🧩 TmuxAI](#-tmuxai)
 
 ---
 
@@ -547,36 +549,12 @@ Comprehensive documentation for each AI terminal tool:
 
 **✨ Key Features:**
 
-<table>
-<tr>
-<td width="50%">
-
-#### 💬 Natural Language Commands
-Generate commands with `#` trigger
-
-</td>
-<td width="50%">
-
-#### 🤖 Real-time AI
-Autosuggestions and error detection
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### 🎤 Voice Commands
-Multi-agent parallel workflows
-
-</td>
-<td width="50%">
-
-#### 🏢 Enterprise Ready
-SAML SSO, BYOL, zero data retention
-
-</td>
-</tr>
-</table>
+| Feature | Description |
+| :--- | :--- |
+| 💬 **Natural Language Commands** | Generate commands with `#` trigger |
+| 🤖 **Real-time AI** | Autosuggestions and error detection |
+| 🎤 **Voice Commands** | Multi-agent parallel workflows |
+| 🏢 **Enterprise Ready** | SAML SSO, BYOL, zero data retention |
 
 **📊 Usage Limits:**
 - 🆓 Free tier: 150 requests/month
@@ -599,44 +577,13 @@ winget install Warp.Warp    # Windows
 
 **✨ Key Features:**
 
-<table>
-<tr>
-<td width="50%">
-
-#### 🖼️ Inline Previews
-Images, markdown, CSV, video files
-
-</td>
-<td width="50%">
-
-#### 📝 VSCode-like Editor
-Integrated editor for remote files
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### 🌐 Built-in Browser
-Web browser and SSH connection manager
-
-</td>
-<td width="50%">
-
-#### 📊 Custom Widgets
-Dashboard creation capabilities
-
-</td>
-</tr>
-<tr>
-<td colspan="2" align="center">
-
-#### 🖥️ Cross-platform
-Local data storage for privacy
-
-</td>
-</tr>
-</table>
+| Feature | Description |
+| :--- | :--- |
+| 🖼️ **Inline Previews** | Images, markdown, CSV, video files |
+| 📝 **VSCode-like Editor** | Integrated editor for remote files |
+| 🌐 **Built-in Browser** | Web browser and SSH connection manager |
+| 📊 **Custom Widgets** | Dashboard creation capabilities |
+| 🖥️ **Cross-platform** | Local data storage for privacy |
 
 **🤖 AI Integration:**
 - ✅ Built-in AI assistance for command suggestions
@@ -649,6 +596,36 @@ Local data storage for privacy
 Download from [waveterm.dev/download](https://waveterm.dev/download)
 
 Available as: Snap, AppImage, .deb, .rpm, and Windows installers
+
+### 📟 iTerm2 AI
+
+**Native AI integration** for macOS's most popular terminal emulator.
+
+**✨ Key Features:**
+- 🧠 **Built-in AI Chat:** Interact with LLMs directly within iTerm2 windows
+- ✍️ **Command Composer:** Describe what you want to do in English, and it generates the shell command
+- 🔍 **Code Explanation:** Highlight output or commands to get instant explanations
+- 🔑 **BYOK:** Bring Your Own Key (OpenAI API) for privacy and control
+
+**📦 Setup:**
+1. Install iTerm2 (v3.5+)
+2. Install the AI plugin (Settings > General > AI > Install)
+3. Enter your OpenAI API key
+4. Use `Cmd-Y` to open the AI Composer
+
+### 🧩 TmuxAI
+
+**AI-Powered, Non-Intrusive Terminal Assistant** that works wherever tmux runs.
+
+**✨ Key Features:**
+- 🚀 **Universal Compatibility:** Works with any terminal emulator via tmux
+- 👻 **Non-Intrusive:** Runs in a separate pane or window, keeping your workflow clean
+- 🤖 **Model Flexibility:** Supports OpenAI and other compatible APIs
+- ⌨️ **Keyboard Centric:** Designed for efficiency with tmux keybindings
+
+**📦 Installation:**
+Prerequisite: `tmux` must be installed.
+Follow instructions at [github.com/alvinunreal/tmuxai](https://github.com/alvinunreal/tmuxai)
 
 ---
 
