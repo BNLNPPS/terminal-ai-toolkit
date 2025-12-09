@@ -99,7 +99,7 @@ GitHub provides two types of AI model access for developers:
 - 📖 [Model Multipliers Documentation](https://docs.github.com/en/copilot/concepts/billing/copilot-requests#model-multipliers)
 - Models (accessible via API) with a **0× multiplier** for non-free plans (not counted toward premium usage): `gpt-4.1`, `gpt-5-mini`, `gpt-4o`
 
-> ⚠️ **Integration Note:** The endpoint `https://api.githubcopilot.com` cannot be used directly by most third-party AI tools. To use GitHub Copilot models with tools like Aider or Claude Code, use the **[🌉 Copilot API Bridge](#-copilot-api-bridge)** proxy to expose an OpenAI/Anthropic-compatible interface.
+> ⚠️ **Integration Note:** The endpoint `https://api.githubcopilot.com` supports OpenAI-compatible interface with GitHub OAuth Access Token (prefixed in `gho_`). However, the open-source proxy **[🌉 Copilot API Bridge](#-copilot-api-bridge)**, authenticated with GitHub User Access Token (prefixed in `ghu_`), provides both OpenAI and Anthropic compatible interfaces.
 
 **List available models:**
 
@@ -439,8 +439,8 @@ ccr restart
 
 ### 🌉 Copilot API Bridge
 
-The GitHub Copilot API (https://api.githubcopilot.com) does not provide direct access for most third‑party AI integrations.
-**[copilot‑api](https://github.com/ericc-ch/copilot-api)**, an open‑source proxy,
+The GitHub Copilot API (https://api.githubcopilot.com) supports OpenAI-compatible interface with GitHub OAuth Access Token (prefixed in `gho_`).
+**[copilot‑api](https://github.com/ericc-ch/copilot-api)**, an open‑source proxy authenticated with GitHub User Access Token (prefixed in `ghu_`),
 provides the necessary bridge: it exposes an OpenAI‑compatible interface as well as an Anthropic‑compatible interface,
 at the endpoint **https://localhost:4141**.
 
