@@ -15,14 +15,14 @@ set -e  # Exit on any error
 # Note: Removed 'set -u' to avoid conflicts with nvm.sh which has undefined variables
 
 # Configuration
-readonly SCRIPT_VERSION="20251119-r1"
+readonly SCRIPT_VERSION="20251222-r1"
 COPILOT_API_PORT=8181
 COPILOT_API_URL="http://localhost:${COPILOT_API_PORT}"
 
 # Default values
 readonly NVM_INSTALL_URL="https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh"
 readonly FREE_DEFAULT_MODEL="claude-haiku-4.5"
-readonly PREMIUM_DEFAULT_MODEL="claude-sonnet-4"
+readonly PREMIUM_DEFAULT_MODEL="claude-sonnet-4.5"
 DEFAULT_MODEL=""  # Selected from available models; falls back to FREE_DEFAULT_MODEL
 MODEL_NAME=""
 COPILOT_PID=""
@@ -944,6 +944,10 @@ list_models() {
             echo "  ${cyan}•${reset} $model"
           fi
         done
+        echo ""
+        echo "${yellow}⚙️  Note: Some models need to be enabled at${reset}"
+        echo "${cyan}   https://github.com/settings/copilot/features${reset}"
+        echo "${yellow}   before they become available for use.${reset}"
         return 0
       else
         echo ""
@@ -1230,6 +1234,10 @@ main() {
           echo "  ${cyan}•${reset} $model"
         fi
       done
+      echo ""
+      echo "${yellow}⚙️  Note: Some models need to be enabled at${reset}"
+      echo "${cyan}   https://github.com/settings/copilot/features${reset}"
+      echo "${yellow}   before they become available for use.${reset}"
     fi
 
     # Print the command without executing it

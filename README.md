@@ -99,6 +99,8 @@ GitHub provides two types of AI model access for developers:
 - 📖 [Model Multipliers Documentation](https://docs.github.com/en/copilot/concepts/billing/copilot-requests#model-multipliers)
 - Models (accessible via API) with a **0× multiplier** for non-free plans (not counted toward premium usage): `gpt-4.1`, `gpt-5-mini`, `gpt-4o`
 
+> **⚙️ Note:** Some models need to be enabled at [GitHub Copilot Features Settings](https://github.com/settings/copilot/features) before they become available for use.
+
 > ⚠️ **Integration Note:** The endpoint `https://api.githubcopilot.com` supports OpenAI-compatible interface with GitHub OAuth Access Token (prefixed in `gho_`). However, the open-source proxy **[🌉 Copilot API Bridge](#-copilot-api-bridge)**, authenticated with GitHub User Access Token (prefixed in `ghu_`), provides both OpenAI and Anthropic compatible interfaces.
 
 **List available models:**

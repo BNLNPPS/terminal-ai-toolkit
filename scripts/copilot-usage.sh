@@ -5,7 +5,7 @@
 # Author: Shuwei Ye, yesw@bnl.gov
 # Date: 2025-10-01
 
-readonly SCRIPT_VERSION="20251204-r1"
+readonly SCRIPT_VERSION="20251222-r1"
 
 # Check if script is being sourced (should be executed directly)
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]]; then
@@ -725,14 +725,34 @@ parse_usage() {
         # Available models for non-free subscription
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}🤖 Available Models:${reset}"
-            echo "  ${cyan}claude-sonnet-4.5 (default), claude-haiku-4.5 (0.33x), claude-sonnet-4${reset}"
-            echo "  ${cyan}gpt-5.1, gpt-5.1-codex-mini (0.33x), gpt-5.1-codex, gpt-5${reset}"
-            echo "  ${cyan}gpt-5-mini (0x), gpt-4.1 (0x), gemini-3-pro-preview${reset}"
+            echo "  ${cyan}1. claude-sonnet-4.5 (default) ✓ 1x${reset}"
+            echo "  ${cyan}2. claude-haiku-4.5 0.33x${reset}"
+            echo "  ${cyan}3. claude-opus-4.5 3x${reset}"
+            echo "  ${cyan}4. claude-sonnet-4 1x${reset}"
+            echo "  ${cyan}5. gpt-5.1-codex-max 1x${reset}"
+            echo "  ${cyan}6. gpt-5.1-codex 1x${reset}"
+            echo "  ${cyan}7. gpt-5.2 1x${reset}"
+            echo "  ${cyan}8. gpt-5.1 1x${reset}"
+            echo "  ${cyan}9. gpt-5 1x${reset}"
+            echo "  ${cyan}10. gpt-5.1-codex-mini 0.33x${reset}"
+            echo "  ${cyan}11. gpt-5-mini 0x${reset}"
+            echo "  ${cyan}12. gpt-4.1 0x${reset}"
+            echo "  ${cyan}13. gemini-3-pro-preview 1x${reset}"
         else
             echo "Available Models:"
-            echo "  claude-sonnet-4.5 (default), claude-haiku-4.5 (0.33x), claude-sonnet-4"
-            echo "  gpt-5.1, gpt-5.1-codex-mini (0.33x), gpt-5.1-codex, gpt-5"
-            echo "  gpt-5-mini (0x), gpt-4.1 (0x), gemini-3-pro-preview"
+            echo "  1. claude-sonnet-4.5 (default) ✓ 1x"
+            echo "  2. claude-haiku-4.5 0.33x"
+            echo "  3. claude-opus-4.5 3x"
+            echo "  4. claude-sonnet-4 1x"
+            echo "  5. gpt-5.1-codex-max 1x"
+            echo "  6. gpt-5.1-codex 1x"
+            echo "  7. gpt-5.2 1x"
+            echo "  8. gpt-5.1 1x"
+            echo "  9. gpt-5 1x"
+            echo "  10. gpt-5.1-codex-mini 0.33x"
+            echo "  11. gpt-5-mini 0x"
+            echo "  12. gpt-4.1 0x"
+            echo "  13. gemini-3-pro-preview 1x"
         fi
         echo ""
 
