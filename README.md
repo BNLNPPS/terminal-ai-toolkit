@@ -615,7 +615,11 @@ Available as: Snap, AppImage, .deb, .rpm, and Windows installers
 1. Install iTerm2 (v3.5+)
 2. Install the AI plugin (Settings > General > AI > Install)
 3. Configure your provider (OpenAI, Gemini, etc.) and API key
-4. Use `Cmd-Y` to open the AI Composer
+4. Start using the AI features:
+   - Cmd + Y: The Command Generator (The AI will generate the actual shell command but will not run it yet.)
+   - Cmd + Shift + Y: The AI Chat
+     - Use this for multi-turn conversations.
+     - If you grant permissions, this chat can read your current terminal history and error messages to provide context-aware answers.
 
 ### 🧩 TmuxAI
 
