@@ -43,12 +43,15 @@ ${bold}Options:${reset}
 ${bold}Requirements:${reset}
 - The ${yellow}'copilot'${reset} command must be available
 - Valid GitHub authentication token (starting with 'ghu_')
+- Models need to be enabled at ${cyan}GitHub Copilot Features Settings${reset} ${yellow}(https://github.com/settings/copilot/features)${reset} before they become available for use
 
 ${bold}Authentication priority:${reset}
 1. GH_TOKEN environment variable (must start with 'ghu_')
 2. GITHUB_TOKEN environment variable (must start with 'ghu_')
 3. Token from ~/.copilot/config.json (copilot_tokens for last_logged_in_user)
 4. OAuth device flow (interactive authentication)
+
+${bold}Note:${reset} If you choose a disabled model, the ${yellow}'copilot'${reset} command will prompt you to enable it from the settings.
 
 ${bold}${bright_cyan}════════════════════════════════════════════════════════════${reset}
 ${bold}${green}📚 For more details, visit:${reset}
@@ -662,9 +665,17 @@ parse_usage() {
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}🤖 Available Models:${reset}"
             echo "  ${cyan}claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1${reset}"
+            echo ""
+            echo "${yellow}💡 Note: Models need to be enabled at GitHub Copilot Features Settings${reset}"
+            echo "${yellow}   (https://github.com/settings/copilot/features) before they become available.${reset}"
+            echo "${yellow}   If you choose a disabled model, 'copilot' will prompt you to enable it.${reset}"
         else
             echo "Available Models:"
             echo "  claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1"
+            echo ""
+            echo "💡 Note: Models need to be enabled at GitHub Copilot Features Settings"
+            echo "   (https://github.com/settings/copilot/features) before they become available."
+            echo "   If you choose a disabled model, 'copilot' will prompt you to enable it."
         fi
         echo ""
 
@@ -738,6 +749,10 @@ parse_usage() {
             echo "  ${cyan}11. gpt-5-mini 0x${reset}"
             echo "  ${cyan}12. gpt-4.1 0x${reset}"
             echo "  ${cyan}13. gemini-3-pro-preview 1x${reset}"
+            echo ""
+            echo "${yellow}💡 Note: Models need to be enabled at GitHub Copilot Features Settings${reset}"
+            echo "${yellow}   (https://github.com/settings/copilot/features) before they become available.${reset}"
+            echo "${yellow}   If you choose a disabled model, 'copilot' will prompt you to enable it.${reset}"
         else
             echo "Available Models:"
             echo "  1. claude-sonnet-4.5 (default) ✓ 1x"
@@ -753,6 +768,10 @@ parse_usage() {
             echo "  11. gpt-5-mini 0x"
             echo "  12. gpt-4.1 0x"
             echo "  13. gemini-3-pro-preview 1x"
+            echo ""
+            echo "💡 Note: Models need to be enabled at GitHub Copilot Features Settings"
+            echo "   (https://github.com/settings/copilot/features) before they become available."
+            echo "   If you choose a disabled model, 'copilot' will prompt you to enable it."
         fi
         echo ""
 

@@ -273,6 +273,8 @@ By default, Copilot uses **claude-sonnet-4.5**. Switch models using the `--model
 | **Free (0x)** | gpt-5-mini, gpt-4.1 |
 
 > **📌 Note:** Model multipliers affect premium request consumption: 0x (free), 0.33x (budget), 1x (standard), 3x (premium).
+>
+> **🔧 Important:** All models need to be enabled at [GitHub Copilot Features Settings](https://github.com/settings/copilot/features) before they become available for use. If you select a disabled model, `copilot` will prompt you to enable it from the command line.
 
 ### 🎨 Common Use Cases
 

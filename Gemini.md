@@ -51,7 +51,12 @@ Save and resume sessions with custom context files.
 <td width="50%">
 
 ### 🆓 Free Tier Access
-60 requests/minute and 1,000 requests/day with personal Google account.
+- **Rate Limits:** 60 requests/minute and 1,000 requests/day with personal Google account
+
+> [!NOTE]
+> The generous 60 RPM / 1,000 RPD limits apply specifically to the Gemini 2.5 Pro and Gemini 2.5 Flash models when using the Gemini CLI with a personal Google account.
+>
+> **Preview Models:** Gemini 3 models are currently in "Preview" and subject to tighter constraints.
 
 </td>
 <td width="50%">
