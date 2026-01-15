@@ -6,12 +6,16 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-copilot--cli-blue?logo=github)](https://github.com/github/copilot-cli)
 [![Documentation](https://img.shields.io/badge/Docs-Official-green?logo=github)](https://docs.github.com/copilot/concepts/agents/about-copilot-cli)
+[![Stars](https://img.shields.io/badge/Stars-6.6k-yellow?logo=github)](https://github.com/github/copilot-cli/stargazers)
+[![Latest Release](https://img.shields.io/badge/Version-v0.0.382-blue?logo=github)](https://github.com/github/copilot-cli/releases/latest)
 
 </div>
 
 ---
 
 ## 🌟 Overview
+
+> **🚀 Public Preview:** GitHub Copilot CLI is currently in public preview. Expect frequent updates and new features!
 
 GitHub Copilot CLI brings AI-powered coding assistance directly to your command line, enabling you to **build**, **debug**, and **understand** code through natural language conversations. Powered by the same agentic harness as GitHub's Copilot coding agent, it provides intelligent assistance while staying deeply integrated with your GitHub workflow.
 
@@ -70,9 +74,38 @@ Preview every action before execution—nothing happens without your explicit ap
 
 ### 📦 Installation
 
-#### Step 1: Install NVM and Node.js
+### Supported Platforms
 
-NVM (Node Version Manager) allows you to easily manage multiple Node.js versions on your system.
+- **Linux**
+- **macOS**
+- **Windows** (requires PowerShell v6 or higher)
+
+### Installation Methods
+
+<details open>
+<summary><b>Option 1: Homebrew (macOS & Linux)</b> 👈 Recommended</summary>
+
+<br>
+
+```bash
+# Install stable version
+brew install copilot-cli
+
+# Or install prerelease version
+brew install copilot-cli@prerelease
+
+# Verify installation
+copilot --version
+```
+
+</details>
+
+<details>
+<summary><b>Option 2: npm (All Platforms)</b></summary>
+
+<br>
+
+If you don't have Node.js installed, first install NVM and Node.js:
 
 ```bash
 # Install NVM
@@ -89,19 +122,66 @@ nvm install node
 npm --version
 ```
 
-#### Step 2: Install GitHub Copilot CLI
-
-Once Node.js and npm are installed:
+Then install GitHub Copilot CLI:
 
 ```bash
-# Install globally with npm
+# Install stable version
 npm install -g @github/copilot
+
+# Or install prerelease version
+npm install -g @github/copilot@prerelease
 
 # Verify installation
 copilot --version
 ```
 
-#### Step 3: Launch and Authenticate
+</details>
+
+<details>
+<summary><b>Option 3: WinGet (Windows)</b></summary>
+
+<br>
+
+```bash
+# Install stable version
+winget install GitHub.Copilot
+
+# Or install prerelease version
+winget install GitHub.Copilot.Prerelease
+
+# Verify installation
+copilot --version
+```
+
+</details>
+
+<details>
+<summary><b>Option 4: Install Script (macOS & Linux)</b></summary>
+
+<br>
+
+```bash
+# Using curl
+curl -fsSL https://gh.io/copilot-install | bash
+
+# Or using wget
+wget -qO- https://gh.io/copilot-install | bash
+
+# Install as root to /usr/local/bin
+curl -fsSL https://gh.io/copilot-install | sudo bash
+
+# Install to custom directory
+curl -fsSL https://gh.io/copilot-install | PREFIX="$HOME/custom" bash
+
+# Install specific version
+curl -fsSL https://gh.io/copilot-install | VERSION="v0.0.382" bash
+```
+
+> **💡 Note:** Use `| sudo bash` to install to `/usr/local/bin`. Set `PREFIX` to install to `$PREFIX/bin/` (defaults to `/usr/local` as root or `$HOME/.local` as non-root). Set `VERSION` to install a specific version.
+
+</details>
+
+### Launch and Authenticate
 
 ```bash
 # Launch Copilot CLI
@@ -267,7 +347,7 @@ By default, Copilot uses **claude-sonnet-4.5**. Switch models using the `--model
 | **Default (1x)** | claude-sonnet-4.5 ✓ |
 | **Standard (1x)** | claude-sonnet-4, gemini-3-pro-preview |
 | | gpt-5.2, gpt-5.1, gpt-5 |
-| | gpt-5.1-codex-max, gpt-5.1-codex |
+| | gpt-5.2-codex, gpt-5.1-codex-max, gpt-5.1-codex |
 | **Budget (0.33x)** | claude-haiku-4.5, gpt-5.1-codex-mini |
 | **Premium (3x)** | claude-opus-4.5 |
 | **Free (0x)** | gpt-5-mini, gpt-4.1 |
@@ -343,6 +423,339 @@ By default, Copilot uses **claude-sonnet-4.5**. Switch models using the `--model
 
 ---
 
+## 🛠️ Command-Line Options
+
+GitHub Copilot CLI provides extensive command-line options for controlling behavior, permissions, and integrations.
+
+### 🚀 Basic Usage Patterns
+
+<details open>
+<summary><b>Interactive Mode</b></summary>
+
+<br>
+
+```bash
+# Start interactive mode
+copilot
+
+# Start interactive mode with an initial prompt
+copilot -i "Fix the bug in main.js"
+
+# Start with specific model
+copilot --model gpt-5
+
+# Resume most recent session
+copilot --continue
+
+# Resume a previous session (shows picker)
+copilot --resume
+
+# Resume specific session by ID
+copilot --resume session-id-here
+```
+
+</details>
+
+<details>
+<summary><b>Non-Interactive Mode</b></summary>
+
+<br>
+
+```bash
+# Execute a single prompt (exits after completion)
+copilot -p "Fix the bug in main.js" --allow-all-tools
+
+# Silent mode (output only the agent response, no stats)
+copilot -p "What is the purpose of main.js?" --silent
+
+# Non-interactive with all permissions enabled
+copilot -p "Refactor the code" --allow-all
+copilot -p "Refactor the code" --yolo  # Same as --allow-all
+
+# Share session to markdown file after completion
+copilot -p "Add error handling" --share ./session.md
+
+# Share session to GitHub Gist
+copilot -p "Add tests" --share-gist --allow-all
+```
+
+</details>
+
+### 🔐 Permission Management
+
+<details>
+<summary><b>Tool Permissions</b></summary>
+
+<br>
+
+```bash
+# Allow all tools to run automatically (required for non-interactive mode)
+copilot --allow-all-tools
+
+# Allow specific tools
+copilot --allow-tool write --allow-tool 'shell(git:*)'
+
+# Allow all git commands except git push
+copilot --allow-tool 'shell(git:*)' --deny-tool 'shell(git push)'
+
+# Deny specific tools (takes precedence over allow)
+copilot --deny-tool 'MyMCP(dangerous_tool)'
+
+# Allow specific MCP server's all tools except one
+copilot --deny-tool 'MyMCP(denied_tool)' --allow-tool 'MyMCP'
+
+# Only make specific tools available to the model
+copilot --available-tools write --available-tools read
+
+# Exclude specific tools from the model
+copilot --excluded-tools dangerous_command
+```
+
+</details>
+
+<details>
+<summary><b>File & Directory Access</b></summary>
+
+<br>
+
+```bash
+# Add additional directories to allowed list
+copilot --add-dir /home/user/projects
+
+# Add multiple directories
+copilot --add-dir ~/workspace --add-dir /tmp
+
+# Allow access to any path (disable verification)
+copilot --allow-all-paths
+
+# Prevent automatic access to system temp directory
+copilot --disallow-temp-dir
+```
+
+</details>
+
+<details>
+<summary><b>URL Access Control</b></summary>
+
+<br>
+
+```bash
+# Allow specific URLs or domains (defaults to HTTPS)
+copilot --allow-url github.com
+
+# Allow multiple URLs
+copilot --allow-url github.com --allow-url api.example.com
+
+# Deny specific URLs (takes precedence over allow)
+copilot --deny-url https://malicious-site.com
+copilot --deny-url malicious-site.com
+
+# Allow all URLs without confirmation
+copilot --allow-all-urls
+```
+
+</details>
+
+<details>
+<summary><b>All Permissions Shortcuts</b></summary>
+
+<br>
+
+```bash
+# Enable all permissions (tools + paths + URLs)
+copilot --allow-all
+copilot --yolo  # Same as --allow-all
+
+# Equivalent to:
+copilot --allow-all-tools --allow-all-paths --allow-all-urls
+```
+
+</details>
+
+### 🔌 MCP Server Configuration
+
+<details>
+<summary><b>GitHub MCP Server</b></summary>
+
+<br>
+
+```bash
+# Enable all GitHub MCP server tools (instead of default CLI subset)
+copilot --enable-all-github-mcp-tools
+
+# Add specific tools to GitHub MCP server
+copilot --add-github-mcp-tool search_issues
+
+# Add multiple tools
+copilot --add-github-mcp-tool search_issues --add-github-mcp-tool create_pr
+
+# Enable all tools using wildcard
+copilot --add-github-mcp-tool '*'
+
+# Add toolsets instead of individual tools
+copilot --add-github-mcp-toolset issues --add-github-mcp-toolset prs
+
+# Enable all toolsets
+copilot --add-github-mcp-toolset all
+```
+
+</details>
+
+<details>
+<summary><b>Custom MCP Servers</b></summary>
+
+<br>
+
+```bash
+# Add additional MCP server configuration (JSON string)
+copilot --additional-mcp-config '{"server": "config"}'
+
+# Load from file (prefix with @)
+copilot --additional-mcp-config @/path/to/config.json
+
+# Multiple configurations
+copilot --additional-mcp-config @config1.json --additional-mcp-config @config2.json
+
+# Disable all built-in MCP servers
+copilot --disable-builtin-mcps
+
+# Disable specific MCP server
+copilot --disable-mcp-server github-mcp-server
+```
+
+> **💡 Note:** Additional MCP configs augment the configuration from `~/.copilot/mcp-config.json` for the current session.
+
+</details>
+
+### ⚙️ General Options
+
+<details>
+<summary><b>Configuration & Customization</b></summary>
+
+<br>
+
+```bash
+# Use custom configuration directory
+copilot --config-dir /path/to/config
+
+# Use specific agent
+copilot --agent custom-agent-name
+
+# Disable custom instructions from AGENTS.md
+copilot --no-custom-instructions
+
+# Disable automatic CLI updates
+copilot --no-auto-update
+
+# Show startup banner
+copilot --banner
+```
+
+</details>
+
+<details>
+<summary><b>Output & Display</b></summary>
+
+<br>
+
+```bash
+# Disable all color output
+copilot --no-color
+
+# Disable rich diff rendering
+copilot --plain-diff
+
+# Enable screen reader optimizations
+copilot --screen-reader
+
+# Control streaming mode
+copilot --stream on
+copilot --stream off
+```
+
+</details>
+
+<details>
+<summary><b>Logging & Debugging</b></summary>
+
+<br>
+
+```bash
+# Set custom log directory
+copilot --log-dir /path/to/logs
+
+# Set log level
+copilot --log-level debug
+copilot --log-level error
+copilot --log-level none
+
+# Available log levels: none, error, warning, info, debug, all, default
+```
+
+</details>
+
+<details>
+<summary><b>Tool Execution</b></summary>
+
+<br>
+
+```bash
+# Disable parallel tool execution
+# (LLM can still make parallel calls, but they execute sequentially)
+copilot --disable-parallel-tools-execution
+```
+
+</details>
+
+### 📚 Help Topics
+
+Access detailed help on specific topics:
+
+```bash
+# General help
+copilot --help
+copilot help
+
+# Configuration settings
+copilot help config
+
+# Interactive mode commands
+copilot help commands
+
+# Environment variables
+copilot help environment
+
+# Logging information
+copilot help logging
+
+# Permissions details
+copilot help permissions
+```
+
+### 🎯 Common Usage Examples
+
+```bash
+# Quick bug fix with auto-approval
+copilot -p "Fix the bug in main.js" --yolo
+
+# Code review with specific model
+copilot --model claude-opus-4.5 -i "Review my recent changes"
+
+# Batch processing with session sharing
+copilot -p "Refactor all API endpoints" --allow-all --share-gist
+
+# Restricted access for security
+copilot --allow-tool read --deny-url '*' --add-dir ./src
+
+# Resume with full permissions
+copilot --continue --allow-all
+
+# Custom MCP integration
+copilot --additional-mcp-config @my-tools.json --enable-all-github-mcp-tools
+```
+
+---
+
 ## 📊 Premium Requests & Quotas
 
 Each prompt submitted to GitHub Copilot CLI consumes **one premium request** from your monthly quota.
@@ -351,7 +764,7 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 
 **Available Models:**
 - **Free Subscription:** claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1
-- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5 (default, 1x), claude-sonnet-4 (1x), gpt-5.1-codex-max (1x), gpt-5.1-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gpt-5 (1x), gemini-3-pro-preview (1x), claude-haiku-4.5 (0.33x), gpt-5.1-codex-mini (0.33x), claude-opus-4.5 (3x), gpt-5-mini (0x), gpt-4.1 (0x)
+- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5 (default, 1x), claude-sonnet-4 (1x), gpt-5.2-codex (1x), gpt-5.1-codex-max (1x), gpt-5.1-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gpt-5 (1x), gemini-3-pro-preview (1x), claude-haiku-4.5 (0.33x), gpt-5.1-codex-mini (0.33x), claude-opus-4.5 (3x), gpt-5-mini (0x), gpt-4.1 (0x)
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|
@@ -456,7 +869,14 @@ Available Models:
 
 ### 🔄 Keep Updated
 ```bash
+# npm
 npm update -g @github/copilot
+
+# Homebrew
+brew upgrade copilot-cli
+
+# WinGet
+winget upgrade GitHub.Copilot
 ```
 Run regularly for latest features and fixes.
 
@@ -483,8 +903,8 @@ Always review suggested changes before accepting them.
 </td>
 <td width="33%">
 
-### ⚡ Master Slash Commands
-Familiarize yourself with shortcuts for quick actions.
+### ⚡ Master Shortcuts
+Use `-p` for quick tasks, `-i` for interactive sessions, and `--yolo` when you trust the agent.
 
 </td>
 <td width="33%">
@@ -495,10 +915,30 @@ Track your quota with the `copilot-usage.sh` script.
 </td>
 </tr>
 <tr>
+<td width="33%">
+
+### 🔒 Control Permissions
+Start with restricted permissions and expand as needed using `--allow-tool` and `--allow-url`.
+
+</td>
+<td width="33%">
+
+### 💾 Session Management
+Use `--continue` to resume work and `--share` to save sessions for documentation.
+
+</td>
+<td width="33%">
+
+### 🔌 Extend with MCP
+Leverage MCP servers to add custom tools and integrations.
+
+</td>
+</tr>
+<tr>
 <td colspan="3" align="center">
 
 ### 💬 Give Feedback
-Use `/feedback` to help improve the tool—your input matters!
+Use `/feedback` to help improve the tool—your input matters! Also visit [GitHub Discussions](https://github.com/github/copilot-cli/discussions) for community support.
 
 </td>
 </tr>
@@ -571,6 +1011,9 @@ node --version
 |:---------|:------------|
 | 📖 [Official Documentation](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) | Complete reference guide |
 | 🐙 [GitHub Repository](https://github.com/github/copilot-cli) | Source code & issues |
+| 💬 [Discussions](https://github.com/github/copilot-cli/discussions) | Community forum & support |
+| 🐛 [Issues](https://github.com/github/copilot-cli/issues) | Bug reports & feature requests |
+| 📝 [Changelog](https://github.com/github/copilot-cli/blob/main/changelog.md) | Release notes & updates |
 | 💳 [Copilot Plans](https://github.com/features/copilot/plans) | Subscription options |
 | 💰 [Individual Plans & Benefits](https://docs.github.com/en/copilot/concepts/billing/individual-plans) | Detailed pricing info |
 | ⚡ [About Premium Requests](https://docs.github.com/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests) | Usage & quota details |
