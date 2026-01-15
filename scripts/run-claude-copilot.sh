@@ -7,15 +7,15 @@
 
 # Check if script is being sourced
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]]; then
-  warn_msg "This script should be executed, not sourced."
-  return 1 2>/dev/null || exit 1
+  echo "Warning: This script should be executed directly, not sourced!" >&2
+  return 1
 fi
 
 set -e  # Exit on any error
 # Note: Removed 'set -u' to avoid conflicts with nvm.sh which has undefined variables
 
 # Configuration
-readonly SCRIPT_VERSION="20251222-r1"
+readonly SCRIPT_VERSION="20260113-r1"
 COPILOT_API_PORT=8181
 COPILOT_API_URL="http://localhost:${COPILOT_API_PORT}"
 
@@ -33,7 +33,6 @@ UPDATE_NVM=false
 VERBOSE=false
 NOT_START_CLAUDE=false
 IS_NVM_AVAILABLE=false
-IS_NPM_AVAILABLE=false
 
 # Color definitions using tput
 bold=$(tput bold 2>/dev/null || echo '')
@@ -158,7 +157,6 @@ while [[ $# -gt 0 ]]; do
       ;;
     --version)
       print_version
-      exit 0
       ;;
     --)
       shift
@@ -222,14 +220,14 @@ cleanup() {
   copilot_pids=$(pgrep -f "copilot-api start" 2>/dev/null || true)
   if [[ -n "$copilot_pids" ]]; then
     verbose_echo "Gracefully stopping remaining copilot-api processes: $copilot_pids"
-    echo $copilot_pids | xargs kill -TERM 2>/dev/null || true
+    echo "$copilot_pids" | xargs kill -TERM 2>/dev/null || true
 
     # Wait a moment for graceful shutdown
     sleep 2
     copilot_pids=$(pgrep -f "copilot-api start" 2>/dev/null || true)
     if [[ -n "$copilot_pids" ]]; then
       verbose_echo "Force killing stubborn copilot-api processes: $copilot_pids"
-      echo $copilot_pids | xargs kill -KILL 2>/dev/null || true
+      echo "$copilot_pids" | xargs kill -KILL 2>/dev/null || true
     fi
   fi
 
@@ -317,7 +315,7 @@ download_and_verify_script() {
   }
   
   # Ensure cleanup of temp file
-  trap "rm -f '$temp_script'" RETURN
+  trap 'rm -f "$temp_script"' RETURN
   
   # Download with timeout
   if ! curl -sSf --connect-timeout 10 --max-time 60 "$url" -o "$temp_script"; then
@@ -480,8 +478,10 @@ get_copilot_subscription_data() {
 display_basic_info() {
   local response="$1"
   
-  local access_type_sku=$(parse_json_value "$response" ".access_type_sku")
-  local copilot_plan=$(parse_json_value "$response" ".copilot_plan")
+  local access_type_sku
+  local copilot_plan
+  access_type_sku=$(parse_json_value "$response" ".access_type_sku")
+  copilot_plan=$(parse_json_value "$response" ".copilot_plan")
   
   # Extract reset date
   local reset_date=""
@@ -519,7 +519,8 @@ display_free_subscription_info() {
   echo "${bold}${magenta}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${reset}"
   echo ""
 
-  local chat_quota=$(parse_json_value "$response" ".limited_user_quotas.chat")
+  local chat_quota
+  chat_quota=$(parse_json_value "$response" ".limited_user_quotas.chat")
   
   # Extract monthly quotas for reference
   local monthly_chat=""
@@ -562,8 +563,10 @@ display_premium_subscription_info() {
   echo "${bold}${magenta}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${reset}"
   echo ""
 
-  local premium_entitlement=$(parse_json_value "$response" ".quota_snapshots.premium_interactions.entitlement")
-  local premium_remaining=$(parse_json_value "$response" ".quota_snapshots.premium_interactions.remaining")
+  local premium_entitlement
+  local premium_remaining
+  premium_entitlement=$(parse_json_value "$response" ".quota_snapshots.premium_interactions.entitlement")
+  premium_remaining=$(parse_json_value "$response" ".quota_snapshots.premium_interactions.remaining")
   local premium_unlimited=""
   
   if command -v jq >/dev/null 2>&1; then
@@ -723,7 +726,7 @@ start_copilot_api() {
     fi
     
     # Process is running, wait for server to be ready
-    if wait_for_server $COPILOT_API_PORT "copilot-api"; then
+    if wait_for_server "$COPILOT_API_PORT" "copilot-api"; then
       verbose_echo "Successfully started copilot-api on port $COPILOT_API_PORT"
       echo $pid
       return 0
@@ -749,6 +752,7 @@ try_source_nvm() {
     verbose_echo "Attempting to source nvm from $HOME/.nvm/nvm.sh"
     
     # Source nvm.sh directly (set -u is now disabled)
+    # shellcheck source=/dev/null
     \. "$HOME/.nvm/nvm.sh"
     
     if command -v nvm >/dev/null 2>&1; then
@@ -768,7 +772,7 @@ check_npm_prefix() {
   local npm_prefix
   local nvm_home
   npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
-  nvm_home=$(cd $NVM_DIR && pwd -P 2>/dev/null || echo "")
+  nvm_home=$(cd "$NVM_DIR" && pwd -P 2>/dev/null || echo "")
   
   if [[ -n "$npm_prefix" ]]; then
     # Check if npm prefix is under nvm management
@@ -851,7 +855,6 @@ ensure_npm() {
     error_msg "npm not found"
     exit 1
   else
-    IS_NPM_AVAILABLE=true
     verbose_echo "npm is available at: $npm_path"
   fi
 
@@ -1030,6 +1033,7 @@ update_nvm() {
   export NVM_DIR="$HOME/.nvm"
   if [[ -s "$NVM_DIR/nvm.sh" ]]; then
     verbose_echo "Attempting to source updated nvm"
+    # shellcheck source=/dev/null
     \. "$NVM_DIR/nvm.sh"
     
     if command -v nvm >/dev/null 2>&1; then
@@ -1136,7 +1140,8 @@ main() {
   
   # Parse log file to get available models
   verbose_echo "Getting available models..."
-  local models=($(extract_models))
+  local models=()
+  mapfile -t models < <(extract_models)
 
   # Choose DEFAULT_MODEL based on subscription type and availability
   DEFAULT_MODEL=""

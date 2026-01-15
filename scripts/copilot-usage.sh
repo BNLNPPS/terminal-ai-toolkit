@@ -5,23 +5,29 @@
 # Author: Shuwei Ye, yesw@bnl.gov
 # Date: 2025-10-01
 
-readonly SCRIPT_VERSION="20251222-r1"
-
 # Check if script is being sourced (should be executed directly)
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]]; then
     echo "Warning: This script should be executed directly, not sourced!" >&2
-    return 1 2>/dev/null || exit 1
+    return 1
 fi
+
+readonly SCRIPT_VERSION="20260113-r1"
 
 # Function to show usage help
 show_help() {
     # Use tput for better portability (always show colors for help visibility)
-    local bold=$(tput bold)
-    local green=$(tput setaf 2)
-    local bright_cyan=$(tput setaf 14)
-    local cyan=$(tput setaf 6)
-    local yellow=$(tput bold)$(tput setaf 3)
-    local reset=$(tput sgr0)
+    local bold
+    bold=$(tput bold)
+    local green
+    green=$(tput setaf 2)
+    local bright_cyan
+    bright_cyan=$(tput setaf 14)
+    local cyan
+    cyan=$(tput setaf 6)
+    local yellow
+    yellow=$(tput bold)$(tput setaf 3)
+    local reset
+    reset=$(tput sgr0)
 
     cat <<EOF
 ${bold}Usage:${reset} $(basename "$0") [OPTIONS]
@@ -114,7 +120,8 @@ print_version() {
 # Function to perform self-update
 self_update() {
     local remote_url="https://raw.githubusercontent.com/BNLNPPS/terminal-ai-toolkit/refs/heads/main/scripts/copilot-usage.sh"
-    local temp_file=$(mktemp)
+    local temp_file
+    temp_file=$(mktemp)
     local bold='' green='' yellow='' red='' bright_cyan='' reset=''
 
     if [[ "$USE_COLOR" == "true" ]]; then
@@ -221,7 +228,7 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         -h|--help)
             show_help
-            exit 0
+            return 0
             ;;
         --no-color)
             USE_COLOR=false
@@ -233,16 +240,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         --version)
             print_version
-            exit 0
             ;;
         --self-update)
             self_update
-            exit 0
             ;;
         *)
             echo "Unknown option: $1" >&2
             echo "Use -h or --help for usage information." >&2
-            exit 1
+            return 1
             ;;
     esac
 done
@@ -487,7 +492,8 @@ get_github_oauth_token() {
     echo "${info}ℹ Please enter the code \"${bold}${user_code}${reset}${info}\" in ${cyan}${verification_uri}${reset}" >&2
 
     # Step 2: Poll for access token
-    local start_time=$(date +%s)
+    local start_time
+    start_time=$(date +%s)
     local end_time=$((start_time + expires_in))
 
     while [[ $(date +%s) -lt $end_time ]]; do
