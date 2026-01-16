@@ -11,7 +11,7 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVA
     return 1
 fi
 
-readonly SCRIPT_VERSION="20260113-r1"
+readonly SCRIPT_VERSION="20260116-r1"
 
 # Function to show usage help
 show_help() {
@@ -228,7 +228,7 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         -h|--help)
             show_help
-            return 0
+            exit 0
             ;;
         --no-color)
             USE_COLOR=false
@@ -247,7 +247,7 @@ while [[ $# -gt 0 ]]; do
         *)
             echo "Unknown option: $1" >&2
             echo "Use -h or --help for usage information." >&2
-            return 1
+            exit 1
             ;;
     esac
 done
@@ -746,15 +746,16 @@ parse_usage() {
             echo "  ${cyan}2. claude-haiku-4.5 0.33x${reset}"
             echo "  ${cyan}3. claude-opus-4.5 3x${reset}"
             echo "  ${cyan}4. claude-sonnet-4 1x${reset}"
-            echo "  ${cyan}5. gpt-5.1-codex-max 1x${reset}"
-            echo "  ${cyan}6. gpt-5.1-codex 1x${reset}"
-            echo "  ${cyan}7. gpt-5.2 1x${reset}"
-            echo "  ${cyan}8. gpt-5.1 1x${reset}"
-            echo "  ${cyan}9. gpt-5 1x${reset}"
-            echo "  ${cyan}10. gpt-5.1-codex-mini 0.33x${reset}"
-            echo "  ${cyan}11. gpt-5-mini 0x${reset}"
-            echo "  ${cyan}12. gpt-4.1 0x${reset}"
-            echo "  ${cyan}13. gemini-3-pro-preview 1x${reset}"
+            echo "  ${cyan}5. gpt-5.2-codex 1x${reset}"
+            echo "  ${cyan}6. gpt-5.1-codex-max 1x${reset}"
+            echo "  ${cyan}7. gpt-5.1-codex 1x${reset}"
+            echo "  ${cyan}8. gpt-5.2 1x${reset}"
+            echo "  ${cyan}9. gpt-5.1 1x${reset}"
+            echo "  ${cyan}10. gpt-5 1x${reset}"
+            echo "  ${cyan}11. gpt-5.1-codex-mini 0.33x${reset}"
+            echo "  ${cyan}12. gpt-5-mini 0x${reset}"
+            echo "  ${cyan}13. gpt-4.1 0x${reset}"
+            echo "  ${cyan}14. gemini-3-pro-preview 1x${reset}"
             echo ""
             echo "${yellow}💡 Note: Models need to be enabled at GitHub Copilot Features Settings${reset}"
             echo "${yellow}   (https://github.com/settings/copilot/features) before they become available.${reset}"
@@ -765,15 +766,16 @@ parse_usage() {
             echo "  2. claude-haiku-4.5 0.33x"
             echo "  3. claude-opus-4.5 3x"
             echo "  4. claude-sonnet-4 1x"
-            echo "  5. gpt-5.1-codex-max 1x"
-            echo "  6. gpt-5.1-codex 1x"
-            echo "  7. gpt-5.2 1x"
-            echo "  8. gpt-5.1 1x"
-            echo "  9. gpt-5 1x"
-            echo "  10. gpt-5.1-codex-mini 0.33x"
-            echo "  11. gpt-5-mini 0x"
-            echo "  12. gpt-4.1 0x"
-            echo "  13. gemini-3-pro-preview 1x"
+            echo "  5. gpt-5.2-codex 1x"
+            echo "  6. gpt-5.1-codex-max 1x"
+            echo "  7. gpt-5.1-codex 1x"
+            echo "  8. gpt-5.2 1x"
+            echo "  9. gpt-5.1 1x"
+            echo "  10. gpt-5 1x"
+            echo "  11. gpt-5.1-codex-mini 0.33x"
+            echo "  12. gpt-5-mini 0x"
+            echo "  13. gpt-4.1 0x"
+            echo "  14. gemini-3-pro-preview 1x"
             echo ""
             echo "💡 Note: Models need to be enabled at GitHub Copilot Features Settings"
             echo "   (https://github.com/settings/copilot/features) before they become available."

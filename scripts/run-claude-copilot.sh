@@ -15,9 +15,13 @@ set -e  # Exit on any error
 # Note: Removed 'set -u' to avoid conflicts with nvm.sh which has undefined variables
 
 # Configuration
-readonly SCRIPT_VERSION="20260113-r1"
+readonly SCRIPT_VERSION="20260116-r1"
 COPILOT_API_PORT=8181
 COPILOT_API_URL="http://localhost:${COPILOT_API_PORT}"
+
+# Known script options (for validation and help messages)
+readonly KNOWN_SHORT_OPTIONS="h m l c u n"
+readonly KNOWN_LONG_OPTIONS="help model list-models check-usage update-pkgs not-start-claude update-nvm verbose version"
 
 # Default values
 readonly NVM_INSTALL_URL="https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh"
@@ -83,12 +87,14 @@ ${blue}Options:${reset}
    ${cyan}    --version${reset}           Show script version
 
 ${blue}Pass-through to Claude:${reset}
-- Any unrecognized options or positional arguments are forwarded to the 'claude' CLI.
-- Use '--' to stop this script's option parsing and pass the remainder verbatim to 'claude'.
+- To pass options to the 'claude' CLI, use the '--' separator to stop this script's option parsing.
+- Everything after '--' is forwarded verbatim to 'claude'.
+- Positional arguments (non-option arguments) can be passed without '--'.
 - Examples:
     $0 -- -p "Your prompt" --temperature 0.7
     $0 -- --help         # show Claude's own help
     $0 -- --version      # show Claude's version
+    $0 "Your prompt"     # positional argument, no -- needed
 
 This script sets up and runs Claude Code with GitHub Copilot models.
 Any additional arguments are passed directly to the 'claude' command.
@@ -167,16 +173,61 @@ while [[ $# -gt 0 ]]; do
       break
       ;;
     --*)
-      # Pass through unrecognized long options to Claude
-      CLAUDE_CODE_ARGS+=("$1")
-      shift
+      # Check for unknown long options
+      option_name="${1#--}"  # Remove leading --
+      
+      if [[ ! " $KNOWN_LONG_OPTIONS " =~ " $option_name " ]]; then
+        error_msg "Unknown option: $1"
+        echo "Known long options: --${KNOWN_LONG_OPTIONS// /, --}" >&2
+        echo "" >&2
+        echo "To pass options to Claude, use the '--' separator:" >&2
+        echo "  $0 -- $1 [more options...]" >&2
+        echo "" >&2
+        echo "Use -h or --help for usage information." >&2
+        exit 1
+      fi
+      
+      # This shouldn't happen if case statement above is complete
+      error_msg "Unhandled option: $1"
+      echo "This is a bug in the script. Please report it." >&2
+      exit 1
       ;;
     -*)
-      # Pass through unrecognized short options to Claude
-      CLAUDE_CODE_ARGS+=("$1")
-      shift
+      # Check for unknown short options
+      option_char="${1#-}"  # Remove leading dash
+      
+      # Check for bundled options (not supported)
+      if [[ ${#option_char} -gt 1 ]]; then
+        error_msg "Unknown or bundled option: $1"
+        echo "This script does not support bundled short options." >&2
+        echo "Known short options: -${KNOWN_SHORT_OPTIONS// /, -}" >&2
+        echo "" >&2
+        echo "To pass options to Claude, use the '--' separator:" >&2
+        echo "  $0 -- $1 [more options...]" >&2
+        echo "" >&2
+        echo "Use -h or --help for usage information." >&2
+        exit 1
+      fi
+      
+      # Single character option - check if it's known
+      if [[ ! " $KNOWN_SHORT_OPTIONS " =~ " $option_char " ]]; then
+        error_msg "Unknown option: $1"
+        echo "Known short options: -${KNOWN_SHORT_OPTIONS// /, -}" >&2
+        echo "" >&2
+        echo "To pass options to Claude, use the '--' separator:" >&2
+        echo "  $0 -- $1 [more options...]" >&2
+        echo "" >&2
+        echo "Use -h or --help for usage information." >&2
+        exit 1
+      fi
+      
+      # This shouldn't happen if case statement above is complete
+      error_msg "Unhandled option: $1"
+      echo "This is a bug in the script. Please report it." >&2
+      exit 1
       ;;
     *)
+      # Positional arguments are passed to Claude
       CLAUDE_CODE_ARGS+=("$1")
       shift
       ;; 
