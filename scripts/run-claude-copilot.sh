@@ -928,31 +928,9 @@ install_package_if_not_installed() {
   run_with_verbosity npm install -g "$package_name"
 }
 
-# Extract available model names using list_models()
-extract_models() {
-  local models=()
-  local output
-  if output=$(list_models 2>/dev/null); then
-    local in_models_section=false
-    while IFS= read -r line; do
-      if [[ "$line" == "Available models:" ]]; then
-        in_models_section=true
-        continue
-      fi
-      if [[ "$in_models_section" == true ]]; then
-        if [[ "$line" =~ ^[[:space:]]+(.+)$ ]]; then
-          models+=("${BASH_REMATCH[1]}")
-        elif [[ -n "$line" ]]; then
-          # End of models section
-          break
-        fi
-      fi
-    done <<< "$output"
-  fi
-  echo "${models[@]}"
-}
-
 # List available models using direct API call to GitHub Copilot
+# Outputs plain format: one model name per line (no colors, headers, or formatting)
+# For formatted display, use print_models() instead
 list_models() {
   verbose_echo "Fetching available models from GitHub Copilot API..."
 
@@ -990,18 +968,8 @@ list_models() {
       models=$(echo "$models_response" | jq -r '.data[].id' 2>/dev/null)
 
       if [[ -n "$models" ]]; then
-        echo ""
-        echo "${bold}${blue}📋 Available models:${reset}"
-        echo "${yellow}Note: Not all listed models may be accessible. Please verify by trying them first.${reset}"
-        echo "$models" | while IFS= read -r model; do
-          if [[ -n "$model" ]]; then
-            echo "  ${cyan}•${reset} $model"
-          fi
-        done
-        echo ""
-        echo "${yellow}⚙️  Note: Some models need to be enabled at${reset}"
-        echo "${cyan}   https://github.com/settings/copilot/features${reset}"
-        echo "${yellow}   before they become available for use.${reset}"
+        # Always output plain format (one model per line)
+        echo "$models"
         return 0
       else
         echo ""
@@ -1025,6 +993,32 @@ list_models() {
       echo "Response: $models_response"
     fi
     return 1
+  fi
+}
+
+# Print available models with formatted output (colors, headers)
+# For use with --list-models option
+print_models() {
+  local models
+  models=$(list_models 2>/dev/null)
+  local exit_code=$?
+  
+  if [[ $exit_code -eq 0 && -n "$models" ]]; then
+    echo ""
+    echo "${bold}${blue}📋 Available models:${reset}"
+    echo "${yellow}Note: Not all listed models may be accessible. Please verify by trying them first.${reset}"
+    echo "$models" | while IFS= read -r model; do
+      if [[ -n "$model" ]]; then
+        echo "  ${cyan}•${reset} $model"
+      fi
+    done
+    echo ""
+    echo "${yellow}⚙️  Note: Some models need to be enabled at${reset}"
+    echo "${cyan}   https://github.com/settings/copilot/features${reset}"
+    echo "${yellow}   before they become available for use.${reset}"
+    return 0
+  else
+    return $exit_code
   fi
 }
 
@@ -1143,7 +1137,7 @@ main() {
 
   # Handle simple commands that require token
   if [[ "$LIST_MODELS" == true ]]; then
-    if ! list_models; then
+    if ! print_models; then
       exit 1
     else
       exit 0
@@ -1189,88 +1183,59 @@ main() {
     is_premium=false
   fi
   
-  # Parse log file to get available models
+  # Get available models
   verbose_echo "Getting available models..."
   local models=()
-  mapfile -t models < <(extract_models)
+  mapfile -t models < <(list_models)
 
-  # Choose DEFAULT_MODEL based on subscription type and availability
-  DEFAULT_MODEL=""
-  local DEFAULT_MODEL_FOUND=true
+  if [[ ${#models[@]} -eq 0 ]]; then
+    error_msg "No models available from GitHub Copilot API"
+    exit 1
+  fi
+  verbose_echo "Available models: ${models[*]}"
 
-  if [[ ${#models[@]} -gt 0 ]]; then
-    # Check if preferred model for subscription type is available
-    local has_premium=false
-    local has_free=false
+  # Helper function to check if a model is available
+  model_is_available() {
+    local target_model="$1"
     for model in "${models[@]}"; do
-      if [[ "$model" == "$PREMIUM_DEFAULT_MODEL" ]]; then
-        has_premium=true
-      fi
-      if [[ "$model" == "$FREE_DEFAULT_MODEL" ]]; then
-        has_free=true
+      if [[ "$model" == "$target_model" ]]; then
+        return 0
       fi
     done
-    
-    # Select based on subscription type
-    if [[ "$is_premium" == true ]]; then
-      # Premium subscription - prefer premium model
-      if [[ "$has_premium" == true ]]; then
-        DEFAULT_MODEL="$PREMIUM_DEFAULT_MODEL"
-        verbose_echo "Selected premium default model: $DEFAULT_MODEL"
-      elif [[ "$has_free" == true ]]; then
-        DEFAULT_MODEL="$FREE_DEFAULT_MODEL"
-        verbose_echo "Premium model not available, using free model: $DEFAULT_MODEL"
-      else
-        DEFAULT_MODEL_FOUND=false
-      fi
-    else
-      # Free subscription - prefer free model
-      if [[ "$has_free" == true ]]; then
-        DEFAULT_MODEL="$FREE_DEFAULT_MODEL"
-        verbose_echo "Selected free default model: $DEFAULT_MODEL"
-      elif [[ "$has_premium" == true ]]; then
-        DEFAULT_MODEL="$PREMIUM_DEFAULT_MODEL"
-        verbose_echo "Free model not available, using premium model: $DEFAULT_MODEL"
-      else
-        DEFAULT_MODEL_FOUND=false
-      fi
-    fi
+    return 1
+  }
+
+  # Determine preferred default based on subscription type
+  local preferred_default="$FREE_DEFAULT_MODEL"
+  if [[ "$is_premium" == "true" ]]; then
+    preferred_default="$PREMIUM_DEFAULT_MODEL"
+    verbose_echo "Premium subscription detected, preferring: $preferred_default"
   else
-    # Fallback when models could not be extracted
-    if [[ "$is_premium" == true ]]; then
-      DEFAULT_MODEL="$PREMIUM_DEFAULT_MODEL"
-    else
-      DEFAULT_MODEL="$FREE_DEFAULT_MODEL"
-    fi
-    verbose_echo "Could not extract models, using fallback: $DEFAULT_MODEL"
+    verbose_echo "Free subscription detected, preferring: $preferred_default"
   fi
 
-  # Set model name
-  if [[ -z "$MODEL_NAME" ]]; then
-    MODEL_NAME="$DEFAULT_MODEL"
-  fi
-  
-  # Validate the user specified model choice against available models
-  if [[ ${#models[@]} -gt 0 ]]; then
-    local final_model_found=false
-    for model in "${models[@]}"; do
-      if [[ "$model" == "$MODEL_NAME" ]]; then
-        final_model_found=true
-        break
-      fi
-    done
-    if [[ "$final_model_found" != true ]]; then
-      if [[ "$DEFAULT_MODEL_FOUND" == true ]]; then
-        warn_msg "Requested model '$MODEL_NAME' not found, falling back to default model '$DEFAULT_MODEL'"
-        MODEL_NAME="$DEFAULT_MODEL"
-      else
-        local fallback_model="${models[0]}"
-        warn_msg "Requested/default models not available; using first available model '$fallback_model'"
-        MODEL_NAME="$fallback_model"
-      fi
+  # Select model: use user-specified if valid, otherwise use preferred default if available, otherwise first available
+  if [[ -n "$MODEL_NAME" ]]; then
+    # User specified a model - validate it
+    if model_is_available "$MODEL_NAME"; then
+      verbose_echo "Using user-specified model: $MODEL_NAME"
+    else
+      warn_msg "Requested model '$MODEL_NAME' is not available"
+      MODEL_NAME=""
     fi
   fi
-  
+
+  # If no valid user-specified model, select from defaults
+  if [[ -z "$MODEL_NAME" ]]; then
+    if model_is_available "$preferred_default"; then
+      MODEL_NAME="$preferred_default"
+      verbose_echo "Using preferred default model: $MODEL_NAME"
+    else
+      MODEL_NAME="${models[0]}"
+      warn_msg "Preferred model '$preferred_default' not available, using: $MODEL_NAME"
+    fi
+  fi
+
   verbose_echo "Using model: $MODEL_NAME"
   
   # Display or run the main job
