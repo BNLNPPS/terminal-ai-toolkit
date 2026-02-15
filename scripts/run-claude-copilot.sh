@@ -17,11 +17,11 @@ set -e  # Exit on any error
 # Configuration
 readonly SCRIPT_VERSION="20260116-r1"
 COPILOT_API_PORT=8181
-COPILOT_API_URL="http://localhost:${COPILOT_API_PORT}"
+COPILOT_API_URL=""
 
 # Known script options (for validation and help messages)
 readonly KNOWN_SHORT_OPTIONS="h m l c u n"
-readonly KNOWN_LONG_OPTIONS="help model list-models check-usage update-pkgs not-start-claude update-nvm verbose version"
+readonly KNOWN_LONG_OPTIONS="help model list-models check-usage update-pkgs not-start-claude verbose version"
 
 # Default values
 readonly NVM_INSTALL_URL="https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh"
@@ -33,7 +33,7 @@ COPILOT_PID=""
 LIST_MODELS=false
 CHECK_USAGE=false
 UPDATE_PKGS=false
-UPDATE_NVM=false
+
 VERBOSE=false
 NOT_START_CLAUDE=false
 IS_NVM_AVAILABLE=false
@@ -82,7 +82,6 @@ ${blue}Options:${reset}
    ${cyan}-c, --check-usage${reset}       Check Copilot API usage
    ${cyan}-u, --update-pkgs${reset}       Update npm, copilot-api, and claude
    ${cyan}-n, --not-start-claude${reset}  Print the command to start claude without executing it
-   ${cyan}    --update-nvm${reset}        Update nvm to the latest version
    ${cyan}    --verbose${reset}           Show detailed output
    ${cyan}    --version${reset}           Show script version
 
@@ -105,7 +104,6 @@ ${bold}Examples:${reset}
   $0 --list-models
   $0 --check-usage
   $0 --update-pkgs
-  $0 --update-nvm
   $0 --version
   $0 -n
   $0 --not-start-claude
@@ -151,10 +149,6 @@ while [[ $# -gt 0 ]]; do
       ;;
     -n|--not-start-claude)
       NOT_START_CLAUDE=true
-      shift
-      ;;
-    --update-nvm)
-      UPDATE_NVM=true
       shift
       ;;
     --verbose)
@@ -696,47 +690,31 @@ check_usage() {
   fi
 }
 
-# Wait for a server to become ready
-wait_for_server() {
-  local port=$1
-  local service_name=$2
-  verbose_echo "Waiting for $service_name to start on port $port..."
-  
-  # Increased retries for slower systems
-  local retries=20 
-  local wait_time=1
-  
-  # Try multiple endpoints since the server might bind to different interfaces
-  local endpoints=(
-    "http://localhost:${port}"
-    "http://127.0.0.1:${port}"
-  )
-  
-  # Also try to get the actual server IP if available
-  if command -v hostname >/dev/null 2>&1; then
-    local hostname_ip
-    hostname_ip=$(hostname -I 2>/dev/null | awk '{print $1}' || echo "")
-    if [[ -n "$hostname_ip" ]]; then
-      endpoints+=("http://${hostname_ip}:${port}")
-    fi
-  fi
-  
-  while [[ $retries -gt 0 ]]; do
-    # Try each endpoint
-    for endpoint in "${endpoints[@]}"; do
-      if curl --silent --fail --output /dev/null --connect-timeout 2 "${endpoint}"; then
-        verbose_echo "$service_name is ready at $endpoint"
-        # Update the global URL to the working endpoint
-        COPILOT_API_URL="$endpoint"
+# Extract the listening URL from copilot-api log file
+# Usage: extract_copilot_url <log_file>
+# Returns: The URL (without trailing slash) or empty string if not found
+extract_copilot_url() {
+  local log_file="$1"
+  local max_attempts=30
+  local attempt=0
+
+  while [[ $attempt -lt $max_attempts ]]; do
+    if [[ -f "$log_file" ]]; then
+      # Extract URL from "Listening on: http://xxx:xxx/" line, removing trailing slash
+      # The line may contain a leading arrow character (➜) which we need to handle
+      local url
+      # Use grep with Perl-compatible regex to extract URL after "Listening on:"
+      # The pattern matches "Listening on:" followed by optional whitespace, then captures http:// until whitespace
+      url=$(grep -oP 'Listening on:\s*\Khttp://[^[:space:]]+' "$log_file" 2>/dev/null | head -1 | sed 's|/$||') || true
+      if [[ -n "$url" ]]; then
+        echo "$url"
         return 0
       fi
-    done
-    
-    sleep $wait_time
-    retries=$((retries - 1))
+    fi
+    sleep 0.5
+    attempt=$((attempt + 1))
   done
-  
-  verbose_error_msg "$service_name failed to start on port $port (tried: ${endpoints[*]})"
+
   return 1
 }
 
@@ -749,16 +727,18 @@ start_copilot_api() {
     local current_port=${ports[$attempt]}
     verbose_echo "Attempt $((attempt + 1)): Starting copilot-api on port $current_port..."
 
-    # Update global variables
+    # Update global port variable
     COPILOT_API_PORT=$current_port
-    COPILOT_API_URL="http://localhost:${COPILOT_API_PORT}"
+
+    # Clear log file before starting
+    rm -f copilot-api.log
 
     copilot-api start --port "$COPILOT_API_PORT" > copilot-api.log 2>&1 &
     local pid=$!
-    
+
     # Wait a moment to see if it starts successfully
     sleep 1
-    
+
     # Check if the process is still running
     if ! kill -0 "$pid" 2>/dev/null; then
       # Process died, check if it was due to port being in use
@@ -775,22 +755,27 @@ start_copilot_api() {
         exit 1
       fi
     fi
-    
-    # Process is running, wait for server to be ready
-    if wait_for_server "$COPILOT_API_PORT" "copilot-api"; then
-      verbose_echo "Successfully started copilot-api on port $COPILOT_API_PORT"
-      echo $pid
+
+    # Extract the actual listening URL from the log
+    verbose_echo "Waiting for copilot-api to report listening URL..."
+    local extracted_url
+    extracted_url=$(extract_copilot_url "copilot-api.log")
+
+    if [[ -n "$extracted_url" ]]; then
+      verbose_echo "Successfully started copilot-api at $extracted_url"
+      # Output both URL and PID separated by a pipe for the caller to parse
+      echo "${extracted_url}|${pid}"
       return 0
     else
-      # Server failed to start, kill the process and try next port
-      verbose_echo "Server failed to start on port $current_port, trying next port..."
+      # Failed to extract URL, kill the process and try next port
+      verbose_echo "Could not extract listening URL from copilot-api log, trying next port..."
       kill "$pid" 2>/dev/null || true
       wait "$pid" 2>/dev/null || true
       attempt=$((attempt + 1))
       continue
     fi
   done
-  
+
   error_msg "Failed to start copilot-api on any of the attempted ports: ${ports[*]}" >&2
   exit 1
 }
@@ -1023,6 +1008,69 @@ print_models() {
 }
 
 
+# Install or update copilot-api from the responses-api feature branch
+# Clones the source, modifies the version string, builds and installs globally via npm
+install_copilot_api() {
+  if command -v copilot-api &> /dev/null; then
+    INSTALLED_VERSION=$(copilot-api --version 2>/dev/null)
+    if [[ "$INSTALLED_VERSION" == *"-responses-api" ]]; then
+      BASE_VERSION="${INSTALLED_VERSION%-responses-api}"
+      REMOTE_VERSION=$(curl -s https://raw.githubusercontent.com/caozhiyuan/copilot-api/feature/responses-api/package.json | grep '"version":' | cut -d'"' -f4)
+      if [[ "$BASE_VERSION" == "$REMOTE_VERSION" ]]; then
+        verbose_echo "copilot-api $INSTALLED_VERSION is already installed and up-to-date. Skipping installation."
+        return 0
+      fi
+    fi
+  fi
+
+  step_msg "Installing copilot-api from responses-api branch..."
+
+  # Get the package source code
+  local build_dir
+  build_dir=$(mktemp -d)
+  git clone -b feature/responses-api https://github.com/caozhiyuan/copilot-api.git "$build_dir/copilot-api"
+
+  pushd "$build_dir/copilot-api" > /dev/null
+
+  # Extract the version (e.g., 0.7.0)
+  OLD_VERSION=$(grep '"version":' package.json | cut -d'"' -f4)
+  NEW_VERSION="${OLD_VERSION}-responses-api"
+
+  # Apply changes to enable the --version flag and custom naming
+  sed -i "s/\"version\": \"$OLD_VERSION\"/\"version\": \"$NEW_VERSION\"/" package.json
+  sed -i "/name: \"copilot-api\",/a \    version: \"$NEW_VERSION\"," src/main.ts
+
+  # Install dependencies and build the project
+  run_with_verbosity npm install
+  run_with_verbosity npx tsdown
+
+  # Create a production tarball (bypassing the bun-based prepack script)
+  run_with_verbosity npm pack --ignore-scripts
+
+  # Install the generated tarball globally
+  run_with_verbosity npm install -g "./copilot-api-${NEW_VERSION}.tgz"
+
+  popd > /dev/null
+
+  # Cleanup
+  rm -rf "$build_dir"
+  npm cache clean --force > /dev/null 2>&1 || true
+
+  success_msg "copilot-api $NEW_VERSION installed successfully"
+}
+
+# Install claude CLI using the official installer
+install_claude() {
+  if command -v claude &> /dev/null; then
+    verbose_echo "claude is already installed"
+    return 0
+  fi
+
+  step_msg "Installing Claude Code..."
+  curl -fsSL https://claude.ai/install.sh | bash
+  success_msg "Claude Code installed successfully"
+}
+
 # Update packages: npm, nvm, node, copilot-api, and claude-code
 update_pkgs() {
   # update npm
@@ -1032,88 +1080,32 @@ update_pkgs() {
   fi
 
   # update/install required packages
-  install_package_if_not_installed "copilot-api"
-  install_package_if_not_installed "@anthropic-ai/claude-code"
-}
-
-# Update nvm to the latest version
-update_nvm() {
-  echo "Checking for the latest nvm version..."
-  
-  # Get the latest nvm version from GitHub API
-  local latest_version
-  latest_version=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep '"tag_name":' | cut -d '"' -f 4)
-  
-  if [[ -z "$latest_version" ]]; then
-    error_msg "Failed to fetch latest nvm version from GitHub API"
-    exit 1
-  fi
-  
-  echo "Latest nvm version: $latest_version"
-  
-  # Check current nvm version if nvm is installed
-  if [[ $IS_NVM_AVAILABLE == true ]]; then
-    local current_version
-    current_version=$(nvm --version 2>/dev/null || echo "unknown")
-    echo "Current nvm version: v$current_version"
-    
-    if [[ "v$current_version" == "$latest_version" ]]; then
-      echo "nvm is already up to date!"
-      return 0
-    fi
-  else
-    echo "nvm is not currently installed"
-  fi
-  
-  echo "Updating nvm to $latest_version..."
-  
-  # Download and install the latest nvm
-  local install_url="https://raw.githubusercontent.com/nvm-sh/nvm/$latest_version/install.sh"
-  if ! download_and_verify_script "$install_url" "nvm"; then
-    error_msg "Failed to install/update nvm"
-    exit 1
-  fi
-  
-  # Source the updated nvm
-  export NVM_DIR="$HOME/.nvm"
-  if [[ -s "$NVM_DIR/nvm.sh" ]]; then
-    verbose_echo "Attempting to source updated nvm"
-    # shellcheck source=/dev/null
-    \. "$NVM_DIR/nvm.sh"
-    
-    if command -v nvm >/dev/null 2>&1; then
-      local new_version
-      new_version=$(nvm --version 2>/dev/null || echo "unknown")
-      echo "Successfully updated nvm to version: v$new_version"
-    else
-      error_msg "Failed to source updated nvm"
-      exit 1
-    fi
-  else
-    error_msg "Could not find nvm.sh after update"
-    exit 1
-  fi
-  
-  echo "nvm update completed successfully!"
+  install_copilot_api
+  install_claude
 }
 
 # Main execution function - handles all script logic and flow
 main() {
-  # First try to source nvm from common locations
-  try_source_nvm
-
-  # Install nvm if not available
-  if [[ $IS_NVM_AVAILABLE != true ]]; then
-    install_nvm
+  # Skip nvm/npm setup if npm is already available
+  if command -v npm &> /dev/null; then
+    verbose_echo "npm is already available at: $(command -v npm)"
+  else
+    # First try to source nvm from common locations
     try_source_nvm
-    if [[ $IS_NVM_AVAILABLE != true ]]; then
-      error_msg "Failed to install nvm"
-      exit 1
-    fi
-  fi
 
-  verbose_echo "Ensuring npm is available..."
-  ensure_npm
+    # Install nvm if not available
+    if [[ $IS_NVM_AVAILABLE != true ]]; then
+      install_nvm
+      try_source_nvm
+      if [[ $IS_NVM_AVAILABLE != true ]]; then
+        error_msg "Failed to install nvm"
+        exit 1
+      fi
+    fi
+
+    verbose_echo "Ensuring npm is available..."
+    ensure_npm
+  fi
 
   # Handle update commands first (no token needed)
   if [[ "$UPDATE_PKGS" == true ]]; then
@@ -1121,14 +1113,9 @@ main() {
     exit 0
   fi
   
-  if [[ "$UPDATE_NVM" == true ]]; then
-    update_nvm
-    exit 0
-  fi
-
   # Check if copilot-ai is available, install if not
   verbose_echo "Checking copilot-api and install it if not available"
-  install_package_if_not_installed "copilot-api" copilot-api
+  install_copilot_api
   
   # Check token file (updates handled earlier)
   if ! check_github_token_file; then
@@ -1155,11 +1142,27 @@ main() {
   # For full execution, we need claude code
   
   verbose_echo "Installing/updating Claude Code..."
-  install_package_if_not_installed "@anthropic-ai/claude-code" claude
+  install_claude
 
   verbose_echo "Starting copilot-api in background..."
-  COPILOT_PID=$(start_copilot_api)
-  
+  local copilot_result
+  copilot_result=$(start_copilot_api)
+
+  # Parse the result (format: "URL|PID")
+  COPILOT_API_URL="${copilot_result%|*}"
+  COPILOT_PID="${copilot_result#*|}"
+
+  # Validate that COPILOT_API_URL was properly set
+  if [[ -z "$COPILOT_API_URL" ]] || [[ -z "$COPILOT_PID" ]]; then
+    error_msg "Failed to extract COPILOT_API_URL from copilot-api log"
+    echo "Last 20 lines from copilot-api.log:"
+    tail -n 20 copilot-api.log 2>/dev/null || echo "(log file not found)"
+    exit 1
+  fi
+
+  verbose_echo "COPILOT_API_URL is set to: $COPILOT_API_URL"
+  verbose_echo "COPILOT_PID is set to: $COPILOT_PID"
+
   # Detect subscription type to choose appropriate default model
   verbose_echo "Detecting subscription type..."
   local subscription_response

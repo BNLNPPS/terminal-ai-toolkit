@@ -346,10 +346,11 @@ By default, Copilot uses **claude-sonnet-4.5**. Switch models using the `--model
 |:-----------|:-------|
 | **Default (1x)** | claude-sonnet-4.5 ✓ |
 | **Standard (1x)** | claude-sonnet-4, gemini-3-pro-preview |
-| | gpt-5.2, gpt-5.1, gpt-5 |
+| | gpt-5.3-codex, gpt-5.2, gpt-5.1, gpt-5 |
 | | gpt-5.2-codex, gpt-5.1-codex-max, gpt-5.1-codex |
 | **Budget (0.33x)** | claude-haiku-4.5, gpt-5.1-codex-mini |
 | **Premium (3x)** | claude-opus-4.6, claude-opus-4.5 |
+| **Ultra (9x)** | claude-opus-4.6-fast |
 | **Free (0x)** | gpt-5-mini, gpt-4.1 |
 
 > **📌 Note:** Model multipliers affect premium request consumption: 0x (free), 0.33x (budget), 1x (standard), 3x (premium).
@@ -764,7 +765,7 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 
 **Available Models:**
 - **Free Subscription:** claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1
-- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5 (default, 1x), claude-sonnet-4 (1x), gpt-5.2-codex (1x), gpt-5.1-codex-max (1x), gpt-5.1-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gpt-5 (1x), gemini-3-pro-preview (1x), claude-haiku-4.5 (0.33x), gpt-5.1-codex-mini (0.33x), claude-opus-4.6 (3x), claude-opus-4.5 (3x), gpt-5-mini (0x), gpt-4.1 (0x)
+- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5 (default, 1x), claude-sonnet-4 (1x), gpt-5.3-codex (1x), gpt-5.2-codex (1x), gpt-5.1-codex-max (1x), gpt-5.1-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gpt-5 (1x), gemini-3-pro-preview (1x), claude-haiku-4.5 (0.33x), gpt-5.1-codex-mini (0.33x), claude-opus-4.6-fast (9x), claude-opus-4.6 (3x), claude-opus-4.5 (3x), gpt-5-mini (0x), gpt-4.1 (0x)
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|
