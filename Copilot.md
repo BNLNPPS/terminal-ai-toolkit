@@ -242,7 +242,7 @@ GitHub Education offers **free access to GitHub Copilot Pro** for verified teach
 
 Teachers and educators can get:
 - ✨ **Full GitHub Copilot Pro subscription** at no cost
-- 🤖 Access to premium models (claude-sonnet-4.5, gpt-5.1)
+- 🤖 Access to premium models (claude-sonnet-4.6, gpt-5.1)
 - ⚡ Higher premium request limits
 - 🎯 All Copilot Pro features
 
@@ -327,7 +327,7 @@ copilot
 
 ### 🧠 Model Selection
 
-By default, Copilot uses **claude-sonnet-4.5**. Switch models using the `--model` flag or the `/model` command:
+By default, Copilot uses **claude-sonnet-4.6**. Switch models using the `--model` flag or the `/model` command:
 
 ```bash
 /model
@@ -344,8 +344,8 @@ By default, Copilot uses **claude-sonnet-4.5**. Switch models using the `--model
 
 | Multiplier | Models |
 |:-----------|:-------|
-| **Default (1x)** | claude-sonnet-4.5 ✓ |
-| **Standard (1x)** | claude-sonnet-4, gemini-3-pro-preview |
+| **Default (1x)** | claude-sonnet-4.6 ✓ |
+| **Standard (1x)** | claude-sonnet-4.5, claude-sonnet-4, gemini-3-pro-preview |
 | | gpt-5.3-codex, gpt-5.2, gpt-5.1, gpt-5 |
 | | gpt-5.2-codex, gpt-5.1-codex-max, gpt-5.1-codex |
 | **Budget (0.33x)** | claude-haiku-4.5, gpt-5.1-codex-mini |
@@ -765,7 +765,7 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 
 **Available Models:**
 - **Free Subscription:** claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1
-- **Pro & Pro+ Subscriptions:** claude-sonnet-4.5 (default, 1x), claude-sonnet-4 (1x), gpt-5.3-codex (1x), gpt-5.2-codex (1x), gpt-5.1-codex-max (1x), gpt-5.1-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gpt-5 (1x), gemini-3-pro-preview (1x), claude-haiku-4.5 (0.33x), gpt-5.1-codex-mini (0.33x), claude-opus-4.6-fast (9x), claude-opus-4.6 (3x), claude-opus-4.5 (3x), gpt-5-mini (0x), gpt-4.1 (0x)
+- **Pro & Pro+ Subscriptions:** claude-sonnet-4.6 (default, 1x), claude-sonnet-4.5 (1x), claude-sonnet-4 (1x), gpt-5.3-codex (1x), gpt-5.2-codex (1x), gpt-5.1-codex-max (1x), gpt-5.1-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gpt-5 (1x), gemini-3-pro-preview (1x), claude-haiku-4.5 (0.33x), gpt-5.1-codex-mini (0.33x), claude-opus-4.6-fast (9x), claude-opus-4.6 (3x), claude-opus-4.5 (3x), gpt-5-mini (0x), gpt-4.1 (0x)
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|
@@ -844,7 +844,7 @@ The script checks for authentication in this order:
 📋 Subscription: copilot_pro 💎
 
 Available Models:
-  claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5
+  claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5
   claude-opus-4.6, claude-opus-4.5
   gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex
   gpt-5.2, gpt-5.2-codex, gpt-5.1-codex-max

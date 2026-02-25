@@ -15,7 +15,7 @@ set -e  # Exit on any error
 # Note: Removed 'set -u' to avoid conflicts with nvm.sh which has undefined variables
 
 # Configuration
-readonly SCRIPT_VERSION="20260116-r1"
+readonly SCRIPT_VERSION="20260224-r1"
 COPILOT_API_PORT=8181
 COPILOT_API_URL=""
 
@@ -26,7 +26,7 @@ readonly KNOWN_LONG_OPTIONS="help model list-models check-usage update-pkgs not-
 # Default values
 readonly NVM_INSTALL_URL="https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh"
 readonly FREE_DEFAULT_MODEL="claude-haiku-4.5"
-readonly PREMIUM_DEFAULT_MODEL="claude-sonnet-4.5"
+readonly PREMIUM_DEFAULT_MODEL="claude-sonnet-4.6"
 DEFAULT_MODEL=""  # Selected from available models; falls back to FREE_DEFAULT_MODEL
 MODEL_NAME=""
 COPILOT_PID=""
