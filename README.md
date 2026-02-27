@@ -142,7 +142,7 @@ curl -L \
 | GPT OSS 20B | [Try it](https://openrouter.ai/openai/gpt-oss-20b:free) |
 | GPT OSS 120B | [Try it](https://openrouter.ai/openai/gpt-oss-120b:free) |
 | GLM 4.5 Air | [Try it](https://openrouter.ai/z-ai/glm-4.5-air:free) |
-| Kimi K2 0711 | [Try it](https://openrouter.ai/moonshotai/kimi-k2:free) |
+| Qwen3 Next 80B A3B Instruct | [Try it](https://openrouter.ai/qwen/qwen3-next-80b-a3b-instruct:free) |
 
 **Setup:** 🔑 [Generate API Key](https://openrouter.ai/settings/keys)
 
@@ -173,12 +173,12 @@ Available models from [Rate Limits](https://console.groq.com/docs/rate-limits) d
 
 | Model | Full Model Name | Link |
 |:------|:----------------|:-----|
-| Qwen3 Next 80B | `qwen/qwen3-next-80b-a3b-instruct` | [Try it](https://build.nvidia.com/qwen/qwen3-next-80b-a3b-instruct) |
-| Qwen3 Coder 480B | `qwen/qwen3-coder-480b-a35b-instruct` | [Try it](https://build.nvidia.com/qwen/qwen3-coder-480b-a35b-instruct) |
+| Qwen3.5 397B-A17B | `qwen/qwen3.5-397b-a17b` | [Try it](https://build.nvidia.com/qwen/qwen3.5-397b-a17b) |
+| MiniMax M2.5 | `minimaxai/minimax-m2.5` | [Try it](https://build.nvidia.com/minimaxai/minimax-m2.5) |
+| Kimi K2.5 | `moonshotai/kimi-k2.5` | [Try it](https://build.nvidia.com/moonshotai/kimi-k2.5) |
+| GLM-5 | `z-ai/glm5` | [Try it](https://build.nvidia.com/z-ai/glm5) |
 | GPT-OSS 120B | `openai/gpt-oss-120b` | [Try it](https://build.nvidia.com/openai/gpt-oss-120b) |
-| Kimi K2 Thinking | `moonshotai/kimi-k2-thinking` | [Try it](https://build.nvidia.com/moonshotai/kimi-k2-thinking) |
 | DeepSeek V3.2 | `deepseek-ai/deepseek-v3_2` | [Try it](https://build.nvidia.com/deepseek-ai/deepseek-v3_2) |
-| MiniMax M2 | `minimaxai/minimax-m2` | [Try it](https://build.nvidia.com/minimaxai/minimax-m2) |
 
 **Setup:**
 - 🔑 [Generate API Key](https://build.nvidia.com/settings/api-keys)
@@ -200,15 +200,14 @@ Ollama now provides **cloud-hosted models** via API access, offering powerful AI
 
 | Model | Full Name | Use Case |
 |:------|:----------|:---------|
-| 🤖 **DeepSeek V3.1** | `deepseek-v3.1:671b` | Advanced reasoning and code generation |
-| 🔥 **GPT-OSS 20B** | `gpt-oss:20b` | Efficient coding and text tasks |
-| 🚀 **GPT-OSS 120B** | `gpt-oss:120b` | High-capacity reasoning and analysis |
-| 💎 **Gemini 3 Flash Preview** | `gemini-3-flash-preview` | Fast and efficient multimodal model |
-| 💎 **Gemini 3 Pro Preview** | `gemini-3-pro-preview` | Complex reasoning and multimodal tasks |
-| 🌙 **Kimi K2** | `kimi-k2:1t` | Long-context understanding and generation |
-| 💻 **Qwen3 Coder** | `qwen3-coder:480b` | Specialized code completion and programming |
-| ⚡ **GLM 4.6** | `glm-4.6` | Balanced performance for diverse tasks |
-| 🎯 **MiniMax M2** | `minimax-m2` | Optimized for productivity and speed |
+| 💻 **Qwen3.5** | `qwen3.5` | Multimodal models delivering exceptional utility and performance |
+| 🎯 **MiniMax M2.5** | `minimax-m2.5` | Designed for real-world productivity and coding tasks |
+| 🌙 **Kimi K2.5** | `kimi-k2.5` | Multimodal agentic model with vision, language, and thinking modes |
+| ⚡ **GLM 5** | `glm-5` | Strong reasoning and agentic model for complex systems engineering |
+| 🤖 **DeepSeek V3.2** | `deepseek-v3.2` | High computational efficiency with superior reasoning and agent performance |
+| 🔥 **GPT-OSS 20B** | `gpt-oss:20b` | Powerful reasoning, agentic tasks, and versatile developer use cases |
+| 🚀 **GPT-OSS 120B** | `gpt-oss:120b` | Powerful reasoning, agentic tasks, and versatile developer use cases |
+| 💎 **Gemini 3 Flash Preview** | `gemini-3-flash-preview` | Frontier intelligence built for speed at a fraction of the cost |
 
 #### 🔗 Integration with AI Coding Tools
 

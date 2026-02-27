@@ -7,7 +7,7 @@
 [![GitHub](https://img.shields.io/badge/GitHub-copilot--cli-blue?logo=github)](https://github.com/github/copilot-cli)
 [![Documentation](https://img.shields.io/badge/Docs-Official-green?logo=github)](https://docs.github.com/copilot/concepts/agents/about-copilot-cli)
 [![Stars](https://img.shields.io/badge/Stars-6.6k-yellow?logo=github)](https://github.com/github/copilot-cli/stargazers)
-[![Latest Release](https://img.shields.io/badge/Version-v0.0.382-blue?logo=github)](https://github.com/github/copilot-cli/releases/latest)
+[![Latest Release](https://img.shields.io/badge/Version-v0.0.419-blue?logo=github)](https://github.com/github/copilot-cli/releases/latest)
 
 </div>
 
@@ -174,7 +174,7 @@ curl -fsSL https://gh.io/copilot-install | sudo bash
 curl -fsSL https://gh.io/copilot-install | PREFIX="$HOME/custom" bash
 
 # Install specific version
-curl -fsSL https://gh.io/copilot-install | VERSION="v0.0.382" bash
+curl -fsSL https://gh.io/copilot-install | VERSION="v0.0.419" bash
 ```
 
 > **💡 Note:** Use `| sudo bash` to install to `/usr/local/bin`. Set `PREFIX` to install to `$PREFIX/bin/` (defaults to `/usr/local` as root or `$HOME/.local` as non-root). Set `VERSION` to install a specific version.
@@ -346,11 +346,11 @@ By default, Copilot uses **claude-sonnet-4.6**. Switch models using the `--model
 |:-----------|:-------|
 | **Default (1x)** | claude-sonnet-4.6 ✓ |
 | **Standard (1x)** | claude-sonnet-4.5, claude-sonnet-4, gemini-3-pro-preview |
-| | gpt-5.3-codex, gpt-5.2, gpt-5.1, gpt-5 |
+| | gpt-5.3-codex, gpt-5.2, gpt-5.1 |
 | | gpt-5.2-codex, gpt-5.1-codex-max, gpt-5.1-codex |
 | **Budget (0.33x)** | claude-haiku-4.5, gpt-5.1-codex-mini |
 | **Premium (3x)** | claude-opus-4.6, claude-opus-4.5 |
-| **Ultra (9x)** | claude-opus-4.6-fast |
+| **Ultra (30x)** | claude-opus-4.6-fast |
 | **Free (0x)** | gpt-5-mini, gpt-4.1 |
 
 > **📌 Note:** Model multipliers affect premium request consumption: 0x (free), 0.33x (budget), 1x (standard), 3x (premium).
@@ -419,6 +419,8 @@ By default, Copilot uses **claude-sonnet-4.6**. Switch models using the `--model
 | `/login` | 🔐 Authenticate with GitHub |
 | `/logout` | 👋 Sign out from your GitHub account |
 | `/model` | 🧠 Select a different AI model |
+| `/lsp` | 🔍 View configured LSP server status |
+| `/experimental` | 🧪 Toggle experimental features |
 | `/feedback` | 📝 Submit confidential feedback survey |
 | `/help` | ❓ Show available commands |
 
@@ -443,7 +445,7 @@ copilot
 copilot -i "Fix the bug in main.js"
 
 # Start with specific model
-copilot --model gpt-5
+copilot --model gpt-5.2
 
 # Resume most recent session
 copilot --continue
@@ -472,6 +474,12 @@ copilot -p "What is the purpose of main.js?" --silent
 # Non-interactive with all permissions enabled
 copilot -p "Refactor the code" --allow-all
 copilot -p "Refactor the code" --yolo  # Same as --allow-all
+
+# Autopilot mode (agent continues working until task is complete)
+copilot -p "Refactor all API endpoints" --autopilot --allow-all
+
+# Limit autopilot continuation messages
+copilot -p "Fix tests" --autopilot --max-autopilot-continues 10 --allow-all
 
 # Share session to markdown file after completion
 copilot -p "Add error handling" --share ./session.md
@@ -650,6 +658,12 @@ copilot --no-auto-update
 
 # Show startup banner
 copilot --banner
+
+# Enable experimental features
+copilot --experimental
+
+# Disable the ask_user tool (agent works autonomously)
+copilot --no-ask-user
 ```
 
 </details>
@@ -672,6 +686,18 @@ copilot --screen-reader
 # Control streaming mode
 copilot --stream on
 copilot --stream off
+
+# Use alternate screen buffer
+copilot --alt-screen on
+copilot --no-alt-screen
+
+# Enable mouse support in alt screen mode
+copilot --mouse on
+copilot --no-mouse
+
+# Enable BASH_ENV support for bash shells
+copilot --bash-env on
+copilot --no-bash-env
 ```
 
 </details>
@@ -704,11 +730,14 @@ copilot --log-level none
 # Disable parallel tool execution
 # (LLM can still make parallel calls, but they execute sequentially)
 copilot --disable-parallel-tools-execution
+
+# Start as Agent Client Protocol server
+copilot --acp
 ```
 
 </details>
 
-### 📚 Help Topics
+### 📚 Help & Subcommands
 
 Access detailed help on specific topics:
 
@@ -733,6 +762,22 @@ copilot help logging
 copilot help permissions
 ```
 
+Additional subcommands:
+
+```bash
+# Initialize Copilot instructions for your project
+copilot init
+
+# Manage plugins
+copilot plugin
+
+# Download the latest version
+copilot update
+
+# Display version information
+copilot version
+```
+
 ### 🎯 Common Usage Examples
 
 ```bash
@@ -745,6 +790,9 @@ copilot --model claude-opus-4.5 -i "Review my recent changes"
 # Batch processing with session sharing
 copilot -p "Refactor all API endpoints" --allow-all --share-gist
 
+# Autopilot mode for complex tasks
+copilot -p "Migrate codebase to TypeScript" --autopilot --allow-all
+
 # Restricted access for security
 copilot --allow-tool read --deny-url '*' --add-dir ./src
 
@@ -753,6 +801,9 @@ copilot --continue --allow-all
 
 # Custom MCP integration
 copilot --additional-mcp-config @my-tools.json --enable-all-github-mcp-tools
+
+# Initialize Copilot instructions for your project
+copilot init
 ```
 
 ---
@@ -765,7 +816,7 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 
 **Available Models:**
 - **Free Subscription:** claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1
-- **Pro & Pro+ Subscriptions:** claude-sonnet-4.6 (default, 1x), claude-sonnet-4.5 (1x), claude-sonnet-4 (1x), gpt-5.3-codex (1x), gpt-5.2-codex (1x), gpt-5.1-codex-max (1x), gpt-5.1-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gpt-5 (1x), gemini-3-pro-preview (1x), claude-haiku-4.5 (0.33x), gpt-5.1-codex-mini (0.33x), claude-opus-4.6-fast (9x), claude-opus-4.6 (3x), claude-opus-4.5 (3x), gpt-5-mini (0x), gpt-4.1 (0x)
+- **Pro & Pro+ Subscriptions:** claude-sonnet-4.6 (default, 1x), claude-sonnet-4.5 (1x), claude-sonnet-4 (1x), gpt-5.3-codex (1x), gpt-5.2-codex (1x), gpt-5.1-codex-max (1x), gpt-5.1-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gemini-3-pro-preview (1x), claude-haiku-4.5 (0.33x), gpt-5.1-codex-mini (0.33x), claude-opus-4.6-fast (30x), claude-opus-4.6 (3x), claude-opus-4.5 (3x), gpt-5-mini (0x), gpt-4.1 (0x)
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|
@@ -861,6 +912,50 @@ Available Models:
 
 ════════════════════════════════════════════════════════════
 ```
+
+---
+
+## 🔧 LSP Server Configuration
+
+GitHub Copilot CLI supports Language Server Protocol (LSP) for enhanced code intelligence features like go-to-definition, hover information, and diagnostics.
+
+<details>
+<summary><b>Installing & Configuring LSP Servers</b></summary>
+
+<br>
+
+Copilot CLI does not bundle LSP servers. Install them separately:
+
+```bash
+# Example: TypeScript support
+npm install -g typescript-language-server
+```
+
+Configure LSP servers at user or repository level:
+
+- **User-level:** `~/.copilot/lsp-config.json`
+- **Repository-level:** `.github/lsp.json`
+
+Example configuration:
+
+```json
+{
+  "lspServers": {
+    "typescript": {
+      "command": "typescript-language-server",
+      "args": ["--stdio"],
+      "fileExtensions": {
+        ".ts": "typescript",
+        ".tsx": "typescript"
+      }
+    }
+  }
+}
+```
+
+Use the `/lsp` command in an interactive session to view configured server status.
+
+</details>
 
 ---
 
@@ -1020,7 +1115,8 @@ node --version
 | 💳 [Copilot Plans](https://github.com/features/copilot/plans) | Subscription options |
 | 💰 [Individual Plans & Benefits](https://docs.github.com/en/copilot/concepts/billing/individual-plans) | Detailed pricing info |
 | ⚡ [About Premium Requests](https://docs.github.com/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests) | Usage & quota details |
-| 🔀 [Model Multipliers](https://docs.github.com/en/copilot/concepts/billing/copilot-requests#model-multipliers) | Models with zero multiplier (not counted toward premium usage) |
+| 🔀 [Model Multipliers](https://docs.github.com/en/copilot/concepts/billing/copilot-requests#model-multipliers) | Models multipliers |
+| 🤖 [Models](https://docs.github.com/en/copilot/get-started/plans#models) | Models available across different plans |
 
 </div>
 

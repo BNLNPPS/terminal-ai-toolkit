@@ -5,7 +5,7 @@
 *AI pair programming in your terminal*
 
 [![Python](https://img.shields.io/badge/Python-pip%20install-blue?logo=python)](https://pypi.org/project/aider-chat/)
-[![GitHub](https://img.shields.io/badge/GitHub-aider-black?logo=github)](https://github.com/paul-gauthier/aider)
+[![GitHub](https://img.shields.io/badge/GitHub-aider-black?logo=github)](https://github.com/Aider-AI/aider)
 
 </div>
 
@@ -166,7 +166,7 @@ Aider connects to a wide range of LLMs:
 - OpenAI
 - Anthropic
 - Google Gemini
-- GROQ
+- Groq
 
 </td>
 <td width="33%">
@@ -189,6 +189,16 @@ Aider connects to a wide range of LLMs:
 </td>
 </tr>
 </table>
+
+#### 🔍 Listing Available Models
+
+You can list available models matching a specific pattern using the `--list-models` flag:
+
+```bash
+aider --no-git --list-models gemini
+aider --no-git --list-models claude
+aider --no-git --list-models deepseek
+```
 
 ### 🎯 Advanced Editing Capabilities
 

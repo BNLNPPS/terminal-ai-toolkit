@@ -14,7 +14,7 @@
 
 Gemini CLI is an open-source AI agent that brings the power of **Google's Gemini** directly into your terminal. It's designed for developers who prefer working in command-line environments.
 
-> **💡 Pro Tip:** Access Gemini 2.5 Pro with 1M token context window—perfect for handling massive codebases!
+> **💡 Pro Tip:** Access Gemini 3 models with 1M token context window—perfect for handling massive codebases!
 
 ## ✨ Key Features
 
@@ -43,7 +43,7 @@ Real-time information with Google Search integration.
 <td width="50%">
 
 ### 💾 Conversation Checkpointing
-Save and resume sessions with custom context files.
+Save and resume sessions with custom context files (GEMINI.md).
 
 </td>
 </tr>
@@ -62,15 +62,21 @@ Save and resume sessions with custom context files.
 <td width="50%">
 
 ### 🔌 Built-in Tools
-File operations, shell commands, web fetching, and search.
+File operations, shell commands, web fetching, and Google Search grounding.
 
 </td>
 </tr>
 <tr>
-<td colspan="2" align="center">
+<td width="50%">
 
 ### 🚀 MCP Extensibility
 Model Context Protocol support for custom integrations.
+
+</td>
+<td width="50%">
+
+### 🧩 Extensions & Hooks
+Custom extensions, skills, and hooks for tailored workflows.
 
 </td>
 </tr>
@@ -98,12 +104,47 @@ npm install -g @google/gemini-cli
 </details>
 
 <details>
-<summary><b>Option 2: Homebrew</b> (macOS/Linux)</summary>
+<summary><b>Option 2: Run instantly with npx</b></summary>
 
 <br>
 
 ```bash
-brew install google-gemini/tap/gemini
+npx @google/gemini-cli
+```
+
+</details>
+
+<details>
+<summary><b>Option 3: Homebrew</b> (macOS/Linux)</summary>
+
+<br>
+
+```bash
+brew install gemini-cli
+```
+
+</details>
+
+<details>
+<summary><b>Option 4: MacPorts</b> (macOS)</summary>
+
+<br>
+
+```bash
+sudo port install gemini-cli
+```
+
+</details>
+
+<details>
+<summary><b>Option 5: Anaconda</b> (for restricted environments)</summary>
+
+<br>
+
+```bash
+conda create -y -n gemini_env -c conda-forge nodejs
+conda activate gemini_env
+npm install -g @google/gemini-cli
 ```
 
 </details>
@@ -188,10 +229,56 @@ gemini
 
 | Flag | Description |
 |:-----|:------------|
-| `--include-directories` | Add additional directories to the workspace context |
+| `-m, --model` | Specify the model to use |
+| `-p, --prompt` | Run in non-interactive (headless) mode |
+| `-i, --prompt-interactive` | Execute prompt and continue in interactive mode |
+| `-y, --yolo` | Automatically accept all actions |
+| `--approval-mode` | Set approval mode (`default`, `auto_edit`, `yolo`, `plan`) |
+| `--policy` | Additional policy files or directories to load |
+| `-r, --resume` | Resume a previous session (`latest` or index number) |
+| `--list-sessions` | List available sessions and exit |
+| `--delete-session` | Delete a session by index number |
+| `--include-directories` | Add additional directories to workspace context |
+| `-e, --extensions` | Specify extensions to use |
+| `-l, --list-extensions` | List all available extensions and exit |
+| `-s, --sandbox` | Run in sandbox mode |
+| `-o, --output-format` | Set output format (`text`, `json`, `stream-json`) |
+| `--raw-output` | Disable sanitization of model output |
 | `--screen-reader` | Enable screen reader mode for accessibility |
-| `--output-format` | Set output format (`text`, `json`, `stream-json`) |
-| `--list-sessions` | List available sessions |
+| `-d, --debug` | Run in debug mode |
+| `--allowed-mcp-server-names` | Specify allowed MCP server names |
+
+#### Subcommands
+
+| Command | Description |
+|:--------|:------------|
+| `gemini mcp` | Manage MCP servers |
+| `gemini extensions` | Manage Gemini CLI extensions |
+| `gemini skills` | Manage agent skills |
+| `gemini hooks` | Manage Gemini CLI hooks |
+
+### 🎨 Approval Modes
+
+| Mode | Description |
+|:-----|:------------|
+| `default` | Prompt for approval before each action |
+| `auto_edit` | Auto-approve edit tools, prompt for others |
+| `yolo` | Auto-approve all tools |
+| `plan` | Read-only mode (no changes) |
+
+```bash
+gemini --approval-mode auto_edit
+gemini --approval-mode plan
+```
+
+### 🔗 GitHub Integration
+
+Gemini CLI integrates with GitHub workflows via the [Gemini CLI GitHub Action](https://github.com/google-github-actions/run-gemini-cli):
+
+- **Pull Request Reviews**: Automated code review with contextual feedback
+- **Issue Triage**: Automated labeling and prioritization
+- **On-demand Assistance**: Mention `@gemini-cli` in issues and PRs
+- **Custom Workflows**: Build automated workflows tailored to your team
 
 
 ---

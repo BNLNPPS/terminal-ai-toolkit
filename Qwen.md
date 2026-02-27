@@ -12,9 +12,9 @@
 
 ## 🌟 Overview
 
-Qwen Code is a command-line interface tool designed for code understanding and editing. It's specifically optimized for **Qwen-Coder models** and adapts the Qwen CLI for enhanced code comprehension capabilities.
+Qwen Code is an open-source AI agent for the terminal, optimized for **Qwen3-Coder** models. It helps you understand large codebases, automate tedious work, and ship faster. Based on [Gemini CLI](https://github.com/google-gemini/gemini-cli), Qwen Code focuses on parser-level adaptations to better support Qwen-Coder models.
 
-> **💡 Pro Tip:** Qwen Code excels at handling large codebases beyond traditional context window limits!
+> **💡 Pro Tip:** Sign in with Qwen OAuth for 1,000 free requests/day—no API key required!
 
 ## ✨ Key Features
 
@@ -36,14 +36,28 @@ Automate operational tasks like handling pull requests and complex rebases.
 <tr>
 <td width="50%">
 
-### 🔧 Enhanced Parser
-Adapted parser specifically optimized for Qwen-Coder models.
+### 🔌 Multi-Protocol Support
+Supports OpenAI, Anthropic, Gemini, and Vertex AI compatible APIs.
 
 </td>
 <td width="50%">
 
 ### 💾 Session Management
-Control token usage with configurable session limits.
+Continue and resume sessions with configurable session limits.
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🖥️ IDE Integration
+Works with VS Code, Zed, and JetBrains IDEs.
+
+</td>
+<td width="50%">
+
+### 🧩 Extensions & MCP
+Extensible with custom extensions and MCP server integration.
 
 </td>
 </tr>
@@ -60,7 +74,26 @@ Control token usage with configurable session limits.
 ### 📦 Installation Options
 
 <details open>
-<summary><b>Option 1: NPM Installation</b> (Recommended) 👈</summary>
+<summary><b>Option 1: Quick Install Script</b> (Recommended) 👈</summary>
+
+<br>
+
+**Linux / macOS:**
+```bash
+curl -fsSL https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen.sh | bash
+```
+
+**Windows (Run as Administrator CMD):**
+```cmd
+curl -fsSL -o %TEMP%\install-qwen.bat https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen.bat && %TEMP%\install-qwen.bat
+```
+
+> **Note:** Restart your terminal after installation to ensure environment variables take effect.
+
+</details>
+
+<details>
+<summary><b>Option 2: NPM Installation</b></summary>
 
 <br>
 
@@ -72,7 +105,7 @@ qwen --version
 </details>
 
 <details>
-<summary><b>Option 2: From Source</b></summary>
+<summary><b>Option 3: From Source</b></summary>
 
 <br>
 
@@ -86,7 +119,7 @@ npm install -g .
 </details>
 
 <details>
-<summary><b>Option 3: Homebrew</b> (macOS/Linux)</summary>
+<summary><b>Option 4: Homebrew</b> (macOS/Linux)</summary>
 
 <br>
 
@@ -163,26 +196,101 @@ qwen
 
 | Flag | Description |
 |:-----|:------------|
+| `-m, --model` | Specify the model to use |
+| `-p, --prompt` | Run in non-interactive (headless) mode |
+| `-i, --prompt-interactive` | Execute prompt and continue in interactive mode |
+| `-y, --yolo` | Automatically accept all actions |
+| `--approval-mode` | Set approval mode (`plan`, `default`, `auto-edit`, `yolo`) |
+| `-c, --continue` | Resume the most recent session |
+| `-r, --resume` | Resume a specific session by ID |
+| `--include-directories` | Add additional directories to workspace |
+| `-e, --extensions` | Specify extensions to use |
+| `-l, --list-extensions` | List all available extensions and exit |
+| `-s, --sandbox` | Run in sandbox mode |
+| `-o, --output-format` | Set output format (`text`, `json`, `stream-json`) |
 | `--screen-reader` | Enable screen reader mode for accessibility |
-| `--vlm-switch-mode` | Control behavior when images are detected (`once`, `session`, `persist`) |
-| `--output-format` | Set output format (`text`, `json`) |
+| `--vlm-switch-mode` | Image detection behavior (`once`, `session`, `persist`) |
+| `--experimental-lsp` | Enable experimental LSP for code intelligence |
+| `--auth-type` | Authentication type (`openai`, `anthropic`, `qwen-oauth`, `gemini`, `vertex-ai`) |
+| `--max-session-turns` | Maximum number of session turns |
+| `--allowed-tools` | Tools to allow without confirmation |
+| `--exclude-tools` | Tools to exclude from the model |
+| `--allowed-mcp-server-names` | Specify allowed MCP server names |
+
+#### Subcommands
+
+| Command | Description |
+|:--------|:------------|
+| `qwen mcp` | Manage MCP servers |
+| `qwen extensions` | Manage Qwen Code extensions |
+
+#### Session Commands
+
+| Command | Description |
+|:--------|:------------|
+| `/help` | Display available commands |
+| `/auth` | Switch authentication methods |
+| `/clear` | Clear conversation history |
+| `/compress` | Compress history to save tokens |
+| `/stats` | Show current session information |
+| `/bug` | Submit a bug report |
+| `/exit` or `/quit` | Exit Qwen Code |
+
+### 🎨 Approval Modes
+
+| Mode | Description |
+|:-----|:------------|
+| `plan` | Read-only planning mode |
+| `default` | Prompt for approval before each action |
+| `auto-edit` | Auto-approve edit tools, prompt for others |
+| `yolo` | Auto-approve all tools |
+
+```bash
+qwen --approval-mode auto-edit
+qwen --approval-mode plan
+```
 
 
 ---
 
 ## 🔐 Authentication
 
-Qwen Code offers several **free options** for getting started:
+Qwen Code supports two authentication methods:
+
+### Qwen OAuth (Recommended & Free)
+
+Start `qwen`, then run `/auth` and choose **Qwen OAuth** to complete the browser flow. Credentials are cached locally.
+
+> **Note:** In non-interactive or headless environments (e.g., CI, SSH, containers), use the API-KEY method instead.
+
+### API-KEY (Flexible)
+
+Use an API key to connect to any supported provider. Supports multiple protocols:
+
+| Protocol | Providers |
+|:---------|:----------|
+| `openai` | OpenAI, Alibaba Cloud Bailian, and compatible endpoints |
+| `anthropic` | Anthropic |
+| `gemini` | Google GenAI |
+| `vertex-ai` | Google Cloud Vertex AI |
 
 ### Free Tier Options
 
 | Option | Daily Limit | Best For |
 |:-------|:-----------|:---------|
-| 🔑 **Qwen OAuth** | 2,000 requests/day | Individual developers (Recommended) |
+| 🔑 **Qwen OAuth** | 1,000 requests/day | Individual developers (Recommended) |
 | 🌏 **ModelScope** | Free API calls | Users in China |
 | 🌍 **OpenRouter** | Free API calls | International users |
 
-> **✨ Recommended:** Qwen OAuth provides automatic credential management for the best experience!
+### 🖥️ IDE Integration
+
+Qwen Code works inside your favorite editor:
+
+| Editor | Support |
+|:-------|:--------|
+| **VS Code** | Full integration |
+| **Zed** | Full integration |
+| **JetBrains IDEs** | Full integration |
 
 ### 🎯 Optimization
 
