@@ -327,7 +327,7 @@ copilot
 
 ### 🧠 Model Selection
 
-By default, Copilot uses **claude-sonnet-4.6**. Switch models using the `--model` flag or the `/model` command:
+By default, Copilot uses **gpt-5.4** for Copilot Pro & Pro+ subscriptions. Switch models using the `--model` flag or the `/model` command:
 
 ```bash
 /model
@@ -344,11 +344,11 @@ By default, Copilot uses **claude-sonnet-4.6**. Switch models using the `--model
 
 | Multiplier | Models |
 |:-----------|:-------|
-| **Default (1x)** | claude-sonnet-4.6 ✓ |
+| **Default (1x)** | gpt-5.4 |
 | **Standard (1x)** | claude-sonnet-4.5, claude-sonnet-4, gemini-3-pro-preview, gpt-5.4 |
 | | gpt-5.3-codex, gpt-5.2, gpt-5.1 |
 | | gpt-5.2-codex, gpt-5.1-codex-max, gpt-5.1-codex |
-| **Budget (0.33x)** | claude-haiku-4.5, gpt-5.1-codex-mini |
+| **Budget (0.33x)** | claude-haiku-4.5, gpt-5.1-codex-mini, gpt-5.4-mini |
 | **Premium (3x)** | claude-opus-4.6, claude-opus-4.5 |
 | **Ultra (30x)** | claude-opus-4.6-fast |
 | **Free (0x)** | gpt-5-mini, gpt-4.1 |

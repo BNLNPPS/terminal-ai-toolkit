@@ -11,7 +11,7 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ -n "$ZSH_EVAL_CONTEXT" && "$ZSH_EVA
     return 1
 fi
 
-readonly SCRIPT_VERSION="20260313-r1"
+readonly SCRIPT_VERSION="20260319-r1"
 
 # Function to show usage help
 show_help() {
@@ -742,7 +742,7 @@ parse_usage() {
         # Available models for non-free subscription
         if [[ "$USE_COLOR" == "true" ]]; then
             echo "${bold}🤖 Available Models:${reset}"
-            echo "  ${cyan}1. claude-sonnet-4.6 (default) ✓ 1x${reset}"
+            echo "  ${cyan}1. gpt-5.4 (default) ✓ 1x${reset}"
             echo "  ${cyan}2. claude-sonnet-4.5 1x${reset}"
             echo "  ${cyan}3. claude-haiku-4.5 0.33x${reset}"
             echo "  ${cyan}4. claude-opus-4.6 3x${reset}"
@@ -750,7 +750,7 @@ parse_usage() {
             echo "  ${cyan}6. claude-opus-4.6-fast 30x${reset}"
             echo "  ${cyan}7. claude-sonnet-4 1x${reset}"
             echo "  ${cyan}8. gpt-5.3-codex 1x${reset}"
-            echo "  ${cyan}9. gpt-5.4 1x${reset}"
+            echo "  ${cyan}9. claude-sonnet-4.6 1x${reset}"
             echo "  ${cyan}10. gpt-5.2-codex 1x${reset}"
             echo "  ${cyan}11. gpt-5.1-codex-max 1x${reset}"
             echo "  ${cyan}12. gpt-5.1-codex 1x${reset}"
@@ -761,13 +761,14 @@ parse_usage() {
             echo "  ${cyan}17. gpt-5-mini 0x${reset}"
             echo "  ${cyan}18. gpt-4.1 0x${reset}"
             echo "  ${cyan}19. gemini-3-pro-preview 1x${reset}"
+            echo "  ${cyan}20. gpt-5.4-mini 0.33x${reset}"
             echo ""
             echo "${yellow}💡 Note: Models need to be enabled at GitHub Copilot Features Settings${reset}"
             echo "${yellow}   (https://github.com/settings/copilot/features) before they become available.${reset}"
             echo "${yellow}   If you choose a disabled model, 'copilot' will prompt you to enable it.${reset}"
         else
             echo "Available Models:"
-            echo "  1. claude-sonnet-4.6 (default) ✓ 1x"
+            echo "  1. gpt-5.4 (default) ✓ 1x"
             echo "  2. claude-sonnet-4.5 1x"
             echo "  3. claude-haiku-4.5 0.33x"
             echo "  4. claude-opus-4.6 3x"
@@ -775,7 +776,7 @@ parse_usage() {
             echo "  6. claude-opus-4.6-fast 30x"
             echo "  7. claude-sonnet-4 1x"
             echo "  8. gpt-5.3-codex 1x"
-            echo "  9. gpt-5.4 1x"
+            echo "  9. claude-sonnet-4.6 1x"
             echo "  10. gpt-5.2-codex 1x"
             echo "  11. gpt-5.1-codex-max 1x"
             echo "  12. gpt-5.1-codex 1x"
@@ -786,6 +787,7 @@ parse_usage() {
             echo "  17. gpt-5-mini 0x"
             echo "  18. gpt-4.1 0x"
             echo "  19. gemini-3-pro-preview 1x"
+            echo "  20. gpt-5.4-mini 0.33x"
             echo ""
             echo "💡 Note: Models need to be enabled at GitHub Copilot Features Settings"
             echo "   (https://github.com/settings/copilot/features) before they become available."
