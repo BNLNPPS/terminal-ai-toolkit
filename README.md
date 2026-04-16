@@ -143,6 +143,9 @@ curl -L \
 | GPT OSS 120B | [Try it](https://openrouter.ai/openai/gpt-oss-120b:free) |
 | GLM 4.5 Air | [Try it](https://openrouter.ai/z-ai/glm-4.5-air:free) |
 | Qwen3 Next 80B A3B Instruct | [Try it](https://openrouter.ai/qwen/qwen3-next-80b-a3b-instruct:free) |
+| Nemotron 3 Super | [Try it](https://openrouter.ai/nvidia/nemotron-3-super-120b-a12b:free) |
+| MiniMax M2.5 | [Try it](https://openrouter.ai/minimax/minimax-m2.5:free) |
+| Gemma 4 26B A4B | [Try it](https://openrouter.ai/google/gemma-4-26b-a4b-it:free) |
 
 **Setup:** 🔑 [Generate API Key](https://openrouter.ai/settings/keys)
 
@@ -200,14 +203,12 @@ Ollama now provides **cloud-hosted models** via API access, offering powerful AI
 
 | Model | Full Name | Use Case |
 |:------|:----------|:---------|
+| ⚡ **GLM 5.1** | `glm-5.1` | Next-gen flagship model for agentic engineering with state-of-the-art coding capabilities |
+| 🎯 **MiniMax M2.7** | `minimax-m2.7` | MiniMax's M2-series model for coding, agentic workflows, and professional productivity |
+| 💎 **Gemma 4** | `gemma4` | Multimodal model by Google DeepMind with advanced reasoning and coding capabilities |
 | 💻 **Qwen3.5** | `qwen3.5` | Multimodal models delivering exceptional utility and performance |
-| 🎯 **MiniMax M2.5** | `minimax-m2.5` | Designed for real-world productivity and coding tasks |
-| 🌙 **Kimi K2.5** | `kimi-k2.5` | Multimodal agentic model with vision, language, and thinking modes |
-| ⚡ **GLM 5** | `glm-5` | Strong reasoning and agentic model for complex systems engineering |
-| 🤖 **DeepSeek V3.2** | `deepseek-v3.2` | High computational efficiency with superior reasoning and agent performance |
-| 🔥 **GPT-OSS 20B** | `gpt-oss:20b` | Powerful reasoning, agentic tasks, and versatile developer use cases |
-| 🚀 **GPT-OSS 120B** | `gpt-oss:120b` | Powerful reasoning, agentic tasks, and versatile developer use cases |
-| 💎 **Gemini 3 Flash Preview** | `gemini-3-flash-preview` | Frontier intelligence built for speed at a fraction of the cost |
+| 🚀 **Nemotron 3 Super** | `nemotron-3-super` | 120B open MoE model activating 12B params for efficient multi-agent applications |
+| 🔥 **GPT-OSS** | `gpt-oss` | Powerful reasoning, agentic tasks, and versatile developer use cases |
 
 #### 🔗 Integration with AI Coding Tools
 
@@ -540,7 +541,7 @@ Comprehensive documentation for each AI terminal tool:
 | 🤝 **Aider** | AI pair programming in your terminal | [Read Guide](Aider.md) |
 | 🤖 **GitHub Copilot CLI** | Copilot coding agent directly in your terminal | [Read Guide](Copilot.md) |
 | 💎 **Gemini CLI** | Google's Gemini in your terminal | [Read Guide](Gemini.md) |
-| 🚀 **Qwen Code** | Qwen3-Coder models in your terminal | [Read Guide](Qwen.md) |
+| 🚀 **Qwen Code** | Qwen 3.6 Plus models in your terminal | [Read Guide](Qwen.md) |
 
 ---
 

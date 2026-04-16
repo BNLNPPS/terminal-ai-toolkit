@@ -55,9 +55,7 @@ Save and resume sessions with custom context files (GEMINI.md).
 - Reference: https://geminicli.com/docs/resources/quota-and-pricing/
 
 > [!NOTE]
-> The generous 60 RPM / 1,000 RPD limits apply specifically to the Gemini 2.5 Pro and Gemini 2.5 Flash models when using the Gemini CLI with a personal Google account.
->
-> **Preview Models:** Gemini 3 models are currently in "Preview" and subject to tighter constraints.
+> The generous 60 RPM / 1,000 RPD limits apply to Gemini 3 models (mix of flash and pro) when using the Gemini CLI with a personal Google account.
 
 </td>
 <td width="50%">
@@ -248,6 +246,9 @@ gemini
 | `--screen-reader` | Enable screen reader mode for accessibility |
 | `-d, --debug` | Run in debug mode |
 | `--allowed-mcp-server-names` | Specify allowed MCP server names |
+| `-w, --worktree` | Start in a new git worktree (auto-named if no name given) |
+| `--acp` | Start agent in ACP mode |
+| `--accept-raw-output-risk` | Suppress security warning when using `--raw-output` |
 
 #### Subcommands
 

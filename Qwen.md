@@ -12,9 +12,9 @@
 
 ## 🌟 Overview
 
-Qwen Code is an open-source AI agent for the terminal, optimized for **Qwen3-Coder** models. It helps you understand large codebases, automate tedious work, and ship faster. Based on [Gemini CLI](https://github.com/google-gemini/gemini-cli), Qwen Code focuses on parser-level adaptations to better support Qwen-Coder models.
+Qwen Code is an open-source AI agent for the terminal, optimized for **Qwen 3.6 Plus** models. It helps you understand large codebases, automate tedious work, and ship faster. Based on [Gemini CLI](https://github.com/google-gemini/gemini-cli), Qwen Code focuses on parser-level adaptations to better support Qwen models.
 
-> **💡 Pro Tip:** Sign in with Qwen OAuth for 1,000 free requests/day—no API key required!
+> **💡 Pro Tip:** Use OpenRouter, Fireworks AI, or Alibaba Cloud ModelStudio for free API access—no upfront cost required!
 
 ## ✨ Key Features
 
@@ -197,7 +197,6 @@ qwen
 | Flag | Description |
 |:-----|:------------|
 | `-m, --model` | Specify the model to use |
-| `-p, --prompt` | Run in non-interactive (headless) mode |
 | `-i, --prompt-interactive` | Execute prompt and continue in interactive mode |
 | `-y, --yolo` | Automatically accept all actions |
 | `--approval-mode` | Set approval mode (`plan`, `default`, `auto-edit`, `yolo`) |
@@ -209,13 +208,17 @@ qwen
 | `-s, --sandbox` | Run in sandbox mode |
 | `-o, --output-format` | Set output format (`text`, `json`, `stream-json`) |
 | `--screen-reader` | Enable screen reader mode for accessibility |
-| `--vlm-switch-mode` | Image detection behavior (`once`, `session`, `persist`) |
 | `--experimental-lsp` | Enable experimental LSP for code intelligence |
 | `--auth-type` | Authentication type (`openai`, `anthropic`, `qwen-oauth`, `gemini`, `vertex-ai`) |
 | `--max-session-turns` | Maximum number of session turns |
 | `--allowed-tools` | Tools to allow without confirmation |
 | `--exclude-tools` | Tools to exclude from the model |
 | `--allowed-mcp-server-names` | Specify allowed MCP server names |
+| `--acp` | Start agent in ACP mode |
+| `--system-prompt` | Override the main session system prompt for this run |
+| `--append-system-prompt` | Append instructions to the main session system prompt |
+| `--channel` | Channel identifier (`VSCode`, `ACP`, `SDK`, `CI`) |
+| `--web-search-default` | Default web search provider (`dashscope`, `tavily`, `google`) |
 
 #### Subcommands
 
@@ -223,6 +226,9 @@ qwen
 |:--------|:------------|
 | `qwen mcp` | Manage MCP servers |
 | `qwen extensions` | Manage Qwen Code extensions |
+| `qwen auth` | Configure Qwen authentication (Qwen-OAuth or Alibaba Cloud Coding Plan) |
+| `qwen hooks` | Manage Qwen Code hooks |
+| `qwen channel` | Manage messaging channels (Telegram, Discord, etc.) |
 
 #### Session Commands
 
@@ -276,11 +282,14 @@ Use an API key to connect to any supported provider. Supports multiple protocols
 
 ### Free Tier Options
 
+> **⚠️ Note:** Qwen OAuth free tier has been discontinued as of 2026-04-15. Use the alternatives below.
+
 | Option | Daily Limit | Best For |
 |:-------|:-----------|:---------|
-| 🔑 **Qwen OAuth** | 1,000 requests/day | Individual developers (Recommended) |
-| 🌏 **ModelScope** | Free API calls | Users in China |
 | 🌍 **OpenRouter** | Free API calls | International users |
+| 🔥 **Fireworks AI** | Free API calls | Alternative provider |
+| 🌏 **ModelScope** | Free API calls | Users in China |
+| ☁️ **Alibaba Cloud ModelStudio** | Pay-per-use | Higher quotas & production |
 
 ### 🖥️ IDE Integration
 
@@ -294,7 +303,7 @@ Qwen Code works inside your favorite editor:
 
 ### 🎯 Optimization
 
-The tool is specifically optimized for **Qwen3-Coder models** and adapts the Gemini CLI for enhanced code understanding capabilities.
+The tool is specifically optimized for **Qwen 3.6 Plus models** and adapts the Gemini CLI for enhanced code understanding capabilities.
 
 ---
 

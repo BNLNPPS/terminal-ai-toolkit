@@ -345,12 +345,10 @@ By default, Copilot uses **gpt-5.4** for Copilot Pro & Pro+ subscriptions. Switc
 | Multiplier | Models |
 |:-----------|:-------|
 | **Default (1x)** | gpt-5.4 |
-| **Standard (1x)** | claude-sonnet-4.5, claude-sonnet-4, gemini-3-pro-preview, gpt-5.4 |
-| | gpt-5.3-codex, gpt-5.2, gpt-5.1 |
-| | gpt-5.2-codex, gpt-5.1-codex-max, gpt-5.1-codex |
-| **Budget (0.33x)** | claude-haiku-4.5, gpt-5.1-codex-mini, gpt-5.4-mini |
+| **Standard (1x)** | claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4 |
+| | gpt-5.3-codex, gpt-5.2-codex, gpt-5.2, gpt-5.1 |
+| **Budget (0.33x)** | claude-haiku-4.5, gpt-5.4-mini |
 | **Premium (3x)** | claude-opus-4.6, claude-opus-4.5 |
-| **Ultra (30x)** | claude-opus-4.6-fast |
 | **Free (0x)** | gpt-5-mini, gpt-4.1 |
 
 > **📌 Note:** Model multipliers affect premium request consumption: 0x (free), 0.33x (budget), 1x (standard), 3x (premium).
@@ -664,6 +662,28 @@ copilot --experimental
 
 # Disable the ask_user tool (agent works autonomously)
 copilot --no-ask-user
+
+# Set reasoning effort level (low, medium, high, xhigh)
+copilot --effort high
+copilot --reasoning-effort xhigh
+
+# Request reasoning summaries for OpenAI models
+copilot --enable-reasoning-summaries
+
+# Strip sensitive env variables from shell/MCP environments and redact from output
+copilot --secret-env-vars MY_KEY,OTHER_KEY
+
+# Export session to Mission Control and enable remote steering
+copilot --remote
+copilot --no-remote
+
+# Set the initial agent mode (interactive, plan, autopilot)
+copilot --mode interactive
+copilot --mode plan
+copilot --mode autopilot
+
+# Load a plugin from a local directory
+copilot --plugin-dir ./my-plugin
 ```
 
 </details>
@@ -686,10 +706,6 @@ copilot --screen-reader
 # Control streaming mode
 copilot --stream on
 copilot --stream off
-
-# Use alternate screen buffer
-copilot --alt-screen on
-copilot --no-alt-screen
 
 # Enable mouse support in alt screen mode
 copilot --mouse on
@@ -727,10 +743,6 @@ copilot --log-level none
 <br>
 
 ```bash
-# Disable parallel tool execution
-# (LLM can still make parallel calls, but they execute sequentially)
-copilot --disable-parallel-tools-execution
-
 # Start as Agent Client Protocol server
 copilot --acp
 ```
@@ -758,8 +770,14 @@ copilot help environment
 # Logging information
 copilot help logging
 
+# Monitoring with OpenTelemetry
+copilot help monitoring
+
 # Permissions details
 copilot help permissions
+
+# Custom model providers (BYOK)
+copilot help providers
 ```
 
 Additional subcommands:
@@ -816,7 +834,7 @@ Each prompt submitted to GitHub Copilot CLI consumes **one premium request** fro
 
 **Available Models:**
 - **Free Subscription:** claude-haiku-4.5 (default), gpt-5-mini, gpt-4.1
-- **Pro & Pro+ Subscriptions:** claude-sonnet-4.6 (default, 1x), claude-sonnet-4.5 (1x), claude-sonnet-4 (1x), gpt-5.3-codex (1x), gpt-5.2-codex (1x), gpt-5.1-codex-max (1x), gpt-5.1-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gpt-5.4 (1x), gemini-3-pro-preview (1x), claude-haiku-4.5 (0.33x), gpt-5.1-codex-mini (0.33x), claude-opus-4.6-fast (30x), claude-opus-4.6 (3x), claude-opus-4.5 (3x), gpt-5-mini (0x), gpt-4.1 (0x)
+- **Pro & Pro+ Subscriptions:** gpt-5.4 (default, 1x), gpt-5.3-codex (1x), gpt-5.2-codex (1x), gpt-5.2 (1x), gpt-5.1 (1x), gpt-5.4-mini (0.33x), gpt-5-mini (0x), gpt-4.1 (0x), claude-sonnet-4.6 (1x), claude-sonnet-4.5 (1x), claude-haiku-4.5 (0.33x), claude-opus-4.6 (3x), claude-opus-4.5 (3x), claude-sonnet-4 (1x)
 
 | Tier | Monthly Premium Requests | Best For |
 |:-----|:------------------------|:---------|
@@ -895,11 +913,10 @@ The script checks for authentication in this order:
 📋 Subscription: copilot_pro 💎
 
 Available Models:
-  claude-sonnet-4.6, claude-sonnet-4.5, claude-sonnet-4, claude-haiku-4.5
-  claude-opus-4.6, claude-opus-4.5
-  gpt-5, gpt-5.1, gpt-5.1-codex-mini, gpt-5.1-codex
-  gpt-5.2, gpt-5.2-codex, gpt-5.1-codex-max
-  gemini-3-pro-preview, gpt-5-mini, gpt-4.1
+  gpt-5.4, gpt-5.3-codex, gpt-5.2-codex, gpt-5.2, gpt-5.1
+  gpt-5.4-mini, gpt-5-mini, gpt-4.1
+  claude-sonnet-4.6, claude-sonnet-4.5, claude-haiku-4.5
+  claude-opus-4.6, claude-opus-4.5, claude-sonnet-4
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   ⚡ Premium Interactions
